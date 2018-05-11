@@ -1,0 +1,48 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Cadastro</ion-title>
+</ion-navbar> 
+</ion-header>
+ <ion-content padding>    
+   <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
+    <ion-item>
+      <ion-label stacked>Nome</ion-label>
+        <ion-input formControlName="name" type="text" placeholder="Jose da Silva Junior"></ion-input>
+        <div class = "errorMessage">{{messageName}}</div>
+      </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Instituição</ion-label>
+      <ion-select formControlName="instituicao" type="text">
+      <!--<ion-select formControlName="role" [(ngModel)="action-sheet"]> -->
+          <ion-option>A.A.A. Adhemar F. da Silva</ion-option> <!--RI-->
+          <ion-option>A.A.A. PPM</ion-option>
+          <ion-option>A.A.A. XIX de Abril</ion-option> <!-- Eco/Adm -->
+          <ion-option>A.A.A. XX de Março</ion-option> <!-- Eng -->
+          <ion-option>A.A.A. XXVIII de Maio</ion-option> <!-- Dir --> 
+          <ion-option>Clube de Benefícios</ion-option>          
+          <ion-option>DCE Celso Furtado</ion-option>
+    </ion-select>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Cargo</ion-label>
+      <ion-input formControlName="cargo" type="text" placeholder="Secretário"></ion-input>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Email</ion-label>
+      <ion-input formControlName="email" type="email" placeholder="josedasilva@emalgumlugar.com.br" [class.invalid]="!signupForm.controls.email.valid && blur"></ion-input>
+      <div class = "errorMessage">{{messageEmail}}</div>
+    </ion-item>
+
+    <ion-item>
+      <ion-label stacked>Senha</ion-label>
+      <ion-input formControlName="password" type="password" [class.invalid]="!signupForm.controls.password.valid && blur"></ion-input>
+      <div class = "errorMessage">{{messagePassword}}</div>
+    </ion-item>    
+  </form>
+  <button ion-button block (click)= "signupUser()" type="submit">
+    Criar uma conta
+  </button>
+</ion-content>

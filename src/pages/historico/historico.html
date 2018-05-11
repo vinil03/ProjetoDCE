@@ -1,0 +1,69 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Histórico</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content>
+
+  <div *ngIf="hasQueryList">
+    <ion-list>
+      <div class="Lista" id="Lista" ion-item *ngFor="let dado of query.items">
+        <!-- <ion-item> -->
+        <h2>{{dado.getName()}}</h2>
+        <h3>{{dado.getCourse()}}</h3>
+        <h3>{{dado.getRA()}} {{dado.getTime()}}</h3>
+        <!-- </ion-item> -->
+      </div>
+    </ion-list>
+  </div>
+
+  <ion-fab right bottom #fab>
+    <button ion-fab [color]="checarInstituicao()">
+      <ion-icon name="arrow-dropup"></ion-icon>
+    </button> <!-- fazer os botoes coloridos-->
+    <ion-fab-list side="top">
+      <button ion-fab (click)="showSearchAC(fab)">
+        <ion-icon name='search'></ion-icon>
+      </button>
+      <button ion-fab (click)="showLoadAC(fab)">
+        <ion-icon name='cloud-upload'></ion-icon>
+      </button>
+    </ion-fab-list>
+  </ion-fab>
+  <button ion-fab [color]="checarInstituicao()" (click)="search(fab)">
+    <ion-icon name='search'></ion-icon>
+  </button>
+  <button ion-fab [color]="checarInstituicao()" (click)="showAC(fab)">
+    <ion-icon name='cloud-upload'></ion-icon>
+  </button>
+  </ion-fab-list>
+  </ion-fab>
+  <button ion-fab>
+    <ion-icon name="arrow-dropup"></ion-icon>
+  </button>
+  <ion-fab-list side="top">
+    <button ion-fab (click)="showSearchAC(fab)">
+      <ion-icon name='search'></ion-icon>
+    </button>
+    <button ion-fab (click)="showLoadAC(fab)">
+      <ion-icon name='cloud-upload'></ion-icon>
+    </button>
+  </ion-fab-list>
+  </ion-fab>
+  <button ion-fab [color]="checarInstituicao()">
+    <ion-icon name="arrow-dropup"></ion-icon>
+  </button>
+  <ion-fab-list side="top">
+    <button ion-fab [color]="checarInstituicao()" (click)="showSearchAC(fab)">
+      <ion-icon name='search'></ion-icon>
+    </button>
+    <button ion-fab [color]="checarInstituicao()" (click)="showLoadAC(fab)">
+      <ion-icon name='cloud-upload'></ion-icon>
+    </button>
+  </ion-fab-list>
+  </ion-fab>
+</ion-content>
+
+</ion-content>

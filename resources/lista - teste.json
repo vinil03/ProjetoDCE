@@ -1,0 +1,54 @@
+{
+    "ass": [
+        {
+            "RA": "201710428",
+            "NAME": "A",
+            "COURSE": "RI"
+        },
+        {
+            "RA": "201710152",
+            "NAME": "AL",
+            "COURSE": "DIREITO"
+        },
+        {
+            "RA": "201650008",
+            "NAME": "ALE",
+            "COURSE": "PPM"
+        },
+        {
+            "RA": "201610003",
+            "NAME": "ALES",
+            "COURSE": "PPM"
+        },
+        {
+            "RA": "201610582",
+            "NAME": "ALEX",
+            "COURSE": "ENG PROD"
+        },
+        {
+            "RA": "201810386",
+            "NAME": "ALEXA",
+            "COURSE": "RI"
+        },
+        {
+            "RA": "201810387",
+            "NAME": "ALEXAN",
+            "COURSE": "RI"
+        },
+        {
+            "RA": "201511017",
+            "NAME": "I",
+            "COURSE": "ENG COMP"
+        },
+        {
+            "RA": "201511047",
+            "NAME": "V",
+            "COURSE": "ENG COMP"
+        },
+        {
+            "RA": "201810072",
+            "NAME": "VI",
+            "COURSE": "ADM"
+        }
+    ]
+}

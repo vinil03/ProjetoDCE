@@ -1,0 +1,64 @@
+page-camera {
+
+}
+
+#LerCodigo{
+    text-align: center;
+    margin-top: 10px;
+}
+
+#Imagem{
+    max-width: 80%;
+    margin-left: 37px;
+    margin-top: 10px;
+}
+
+#Nome{
+    text-align: center;
+    font-size: 20px;
+}
+
+#RA{
+    text-align: center;
+    font-size: 20px;
+}
+
+#EstadoASS{
+    text-align: center;
+    margin-top: 65px;
+    font-size: 45px;
+    
+}
+
+#EstadoNASS{
+    text-align: center;
+    color: rgb(255, 0, 0); //trocar
+    margin-top: 65px;
+    font-size: 45px;
+}
+
+#CodB{
+    text-align: center;
+    #CodBarras {
+        display: inline-block;
+        font-size: 10em;
+        text-align: center;
+        margin-top: 20px;
+        // color: rgb(230, 230, 0);
+    }
+}
+
+#CodIn{
+    text-align: center;
+    #CodInput {
+        display: inline-block;
+        font-size: 10em;
+        text-align: center;
+        margin-top: 30px;
+        // color: rgb(230, 230, 0);
+    }
+}
+
+#Leg{
+    text-align: center;
+}

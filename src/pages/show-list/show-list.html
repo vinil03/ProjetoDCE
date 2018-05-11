@@ -1,0 +1,24 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{this.header}}</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <div>{{this.subHeader}}</div>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <div class="Lista" id="Lista" ion-item *ngFor="let dado of list.items">
+        <h2>{{dado.getName()}}</h2>
+        <h3>{{dado.getCourse()}}</h3>
+        <h3>{{dado.getRA()}} {{dado.getTime()}}</h3>
+    </div>
+  </ion-list>
+  <ion-fab right bottom #fab>
+    <button ion-fab [color]="checarInstituicao()" (click)="emailList(fab)">
+      <ion-icon name="mail"></ion-icon>
+    </button>
+  </ion-fab>
+</ion-content>

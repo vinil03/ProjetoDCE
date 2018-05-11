@@ -1,0 +1,55 @@
+page-login {
+    text-align: center;
+    .invalid {
+        border-bottom: 1px solid #ff6153;
+      }
+
+    
+    #logo{
+        max-width: 80%;
+        margin-left: 37px;
+        margin-top: 10px;
+        text-align: center;
+    }
+
+    .button-ios{
+        border-radius: 4px;
+        height: 2.8em;
+        font-size: 1.6rem;
+        //color: #fff;
+        //background-color: #488aff;
+        margin: 0.4rem 0.2rem;
+        
+        margin-top: 15px;
+    }
+    .login-button{
+        border-radius: 4px;
+        height: 2.8em;
+        font-size: 1.6rem;
+        color: #fff;
+        background-color: #488aff;
+        margin: -0.6rem -1.8rem;
+        
+        margin-top: 15px;
+    }
+
+    .button-clear-ios {
+        border-radius: 4px;
+        height: 2.8em;
+        font-size: 1.6rem;
+        margin: -0.6rem -1.8rem;
+       
+        margin-top: 15px;
+    }
+}
+
+#FG-log{
+    display: inline-block;
+    font-size: 5em;
+    text-align: center;
+    color: #0011ff; //COMO TROCAR DINAMICAMENTE?
+    #Google{
+        color: #00a2ff
+    }
+}
+   

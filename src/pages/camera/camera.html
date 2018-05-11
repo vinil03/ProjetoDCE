@@ -1,0 +1,52 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Verificar Associado</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content no-bounce>
+  <!-- <div class="Imagem" id="Imagem">
+    <img src="assets/imgs/DCEcoloridoPNG.png" />
+  </div> -->
+
+  <!-- <button ion-button [color]="condition() ? 'primary' : 'secondary'"></button> -->
+  
+  <div class="LerCodigo" id="CodB">
+    <ion-icon [color]="checarInstituicao()" (click)= "launchReader()" name="md-barcode"  id="CodBarras"></ion-icon>
+    <!-- <button ion-button (click)="launchReader()"> Ler código de barras</button> -->
+    <ion-icon [color]="checarInstituicao()" (click)= "launchReader()" name="md-barcode"  id="CodBarras"></ion-icon>
+  </div>
+  <div class= "legendaImagem" id="Leg">
+      <h4>Ler código de barras</h4>
+  </div>
+  
+  <div class="InputCodigo" id="CodIn">
+      <ion-icon [color]="checarInstituicao()" (click)= "showPrompt()" name="md-keypad" id="CodInput"></ion-icon>
+  </div>
+  <div class= "legendaImagem" id="Leg">
+      <h4>Digitar RA</h4>
+  </div>
+
+  <div class="Verifica" id="Verificacao">
+    <div *ngIf="queryCreated==true">
+        <div *ngIf="isAss==true; then thenBlock else elseBlock"></div>
+      <ng-template #thenBlock>
+        <div class="EstadoASS" id="EstadoASS">
+          Associado
+        </div>
+      </ng-template>
+      <ng-template #elseBlock>
+        <div class="EstadoNASS" id="EstadoNASS">
+          Não Associado
+        </div>
+      </ng-template>
+        <div class="Nome" id="Nome">
+          {{query.name}}
+        </div>
+        <div class="RA" id="RA">
+          {{query.RA}}
+        </div>
+      
+    </div>
+  </div>
+</ion-content>

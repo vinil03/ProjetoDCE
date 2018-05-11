@@ -1,0 +1,8 @@
+{
+  "name": "Check_DCE",
+  "app_id": "130e6772",
+  "type": "ionic-angular",
+  "integrations": {
+    "cordova": {}
+  }
+}
