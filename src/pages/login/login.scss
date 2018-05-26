@@ -1,0 +1,34 @@
+page-login {
+    text-align: center;
+
+    .button-ios{
+        border-radius: 4px;
+        height: 2.8em;
+        font-size: 1.6rem;
+        //color: #fff;
+        //background-color: #488aff;
+        margin: 0.4rem 0.2rem;
+        padding: 0 8em;
+        margin-top: 15px;
+    }
+    .login-button{
+        border-radius: 4px;
+        height: 2.8em;
+        font-size: 1.6rem;
+        color: #fff;
+        background-color: #488aff;
+        margin: -0.6rem -1.8rem;
+        padding: 0 8em;
+        margin-top: 15px;
+    }
+
+    .button-clear-ios {
+        border-radius: 4px;
+        height: 2.8em;
+        font-size: 1.6rem;
+        margin: -0.6rem -1.8rem;
+        padding: 0 8em;
+        margin-top: 15px;
+    }
+
+}

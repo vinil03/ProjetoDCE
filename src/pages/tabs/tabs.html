@@ -1,5 +1,40 @@
+<ion-header>
+    <ion-navbar>
+      <ion-title>DCE Associado Checker</ion-title>
+    </ion-navbar>
+  </ion-header>
+
+<ion-content>
+  <div class="Imagem" id="Imagem">
+      <img src="../../assets/imgs/DCEcoloridoPNG.png"/>
+       <ion-list>
+          <ion-item>
+            <ion-thumbnail item-start>
+              <img src="img/thumbnail-totoro.png">
+            </ion-thumbnail>
+            <h2>My Neighbor Totoro</h2>
+            <button ion-button clear item-end>View</button>
+          </ion-item>
+        </ion-list>
+  </div>
+
+    <div class="Login-button" id="LerCodigo">
+        <button ion-button>Ler código de barras</button>
+        <button ion-button (click)="showPrompt()">Digitar RA</button>
+    </div>
+
+    <div class="Verifica" id="Verificacao">
+      <!-- If Associado, mostrar ASSOCIADO, se não mostrar não associado -->
+      Associado  
+      <div class="Nome" id="Nome">
+        Nome do Aluno
+      </div>
+    </div>
+
+</ion-content>
+
 <ion-tabs>
-  <ion-tab [root]="tab1Root" tabTitle="Home" tabIcon="home"></ion-tab>
-  <ion-tab [root]="tab2Root" tabTitle="About" tabIcon="information-circle"></ion-tab>
-  <ion-tab [root]="tab3Root" tabTitle="Contact" tabIcon="contacts"></ion-tab>
+  <ion-tab [root]="tab1Root" tabTitle="Camera" tabIcon="home"></ion-tab>
+  <ion-tab [root]="tab2Root" tabTitle="Historico" tabIcon="information-circle"></ion-tab>
+  <ion-tab [root]="tab3Root" tabTitle="Presença" tabIcon="Presenca"></ion-tab>
 </ion-tabs>
