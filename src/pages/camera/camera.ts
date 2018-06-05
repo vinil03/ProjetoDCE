@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { HistoricoPage } from '../historico/historico';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner';
 
 /**
  * Generated class for the CameraPage page.
@@ -19,7 +20,7 @@ export class CameraPage {
   tab1Root = CameraPage;
   tab2Root = HistoricoPage;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private barcodeScanner: BarcodeScanner) {
   }
 
   ionViewDidLoad() {
@@ -52,6 +53,14 @@ export class CameraPage {
       ]
     });
     prompt.present();
+  }
+
+  launchReader(){
+    this.barcodeScanner.scan().then(barcodeData => {
+      console.log('Barcode data', barcodeData);
+     }).catch(err => {
+         console.log('Error', err);
+     });
   }
 
 }
