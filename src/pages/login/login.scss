@@ -1,6 +1,11 @@
 page-login {
     text-align: center;
 
+    .logo {
+        max-width: 40%;
+        height: auto;
+    }
+
     .button-ios{
         border-radius: 4px;
         height: 2.8em;

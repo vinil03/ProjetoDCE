@@ -1,12 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-
-/**
- * Generated class for the LoginPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { CameraPage } from '../pages/camera/camera';
 
 @IonicPage()
 @Component({
@@ -18,6 +12,14 @@ export class LoginPage {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
+  loadCameraPage(){
+    this.navCtrl.push(CameraPage);
+  }
+
+  sendMail() {
+    window.open(`mailto:iago.regiani@dcefacamp.com`, '_system');
+ }
+  
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }

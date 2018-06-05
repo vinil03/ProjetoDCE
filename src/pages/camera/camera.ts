@@ -1,14 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { HistoricoPage } from '../historico/historico';
-import { BarcodeScanner } from '@ionic-native/barcode-scanner';
-
-/**
- * Generated class for the CameraPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
+import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner';
 
 @IonicPage()
 @Component({
@@ -19,10 +12,12 @@ export class CameraPage {
 
   tab1Root = CameraPage;
   tab2Root = HistoricoPage;
-
+  options: BarcodeScannerOptions;
+  RA: Number;
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private barcodeScanner: BarcodeScanner) {
-  }
 
+  }
+  
   ionViewDidLoad() {
     console.log('ionViewDidLoad CameraPage');
   }
@@ -56,11 +51,12 @@ export class CameraPage {
   }
 
   launchReader(){
-    this.barcodeScanner.scan().then(barcodeData => {
-      console.log('Barcode data', barcodeData);
-     }).catch(err => {
-         console.log('Error', err);
+    this.options = {
+      prompt: 'Passe o código de barras da carterinha',
+      resultDisplayDuration: 500
+    }
+    this.barcodeScanner.scan(this.options).then(barcodeData => { this.RA = Number (barcodeData.text.substring(2,11))}).catch(err => {
+         console.log('Erro de leitura do barcode', err);
      });
-  }
-
+  } 
 }

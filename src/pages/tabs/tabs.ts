@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { CameraPage } from '../camera/camera';
 import { HistoricoPage } from '../historico/historico';
