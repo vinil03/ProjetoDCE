@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { CameraPage } from '../pages/camera/camera';
+
+import { CameraPage } from '../camera/camera';
+import { TabsPage } from '../tabs/tabs';
 
 @IonicPage()
 @Component({
@@ -13,7 +15,7 @@ export class LoginPage {
   }
 
   loadCameraPage(){
-    this.navCtrl.push(CameraPage);
+    this.navCtrl.setRoot(CameraPage);
   }
 
   sendMail() {
@@ -23,9 +25,13 @@ export class LoginPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }
-  
-  goToCamera(){
-    this.navCtrl.push(TabsPage);
+
+  sendLogin(){
+
   }
 
+  sendPassword(){
+
+  }
+  
 }

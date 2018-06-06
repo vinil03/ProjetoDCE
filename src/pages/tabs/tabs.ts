@@ -18,31 +18,4 @@ export class TabsPage {
   constructor(public alertCtrl: AlertController ,public navCtrl: NavController) {
   }
 
-  // showPrompt() {
-  //   let prompt = this.alertCtrl.create({
-  //     title: 'RA',
-  //     message: "Digite o RA do Aluno",
-  //     inputs: [
-  //       {
-  //         name: 'RA',
-  //         placeholder: 'RA'
-  //       },
-  //     ],
-  //     buttons: [
-  //       {
-  //         text: 'Cancel',
-  //         handler: data => {
-  //           console.log('Cancel clicked');
-  //         }
-  //       },
-  //       {
-  //         text: 'Save',
-  //         handler: data => {
-  //           console.log('Saved clicked');
-  //         }
-  //       }
-  //     ]
-  //   });
-  //   prompt.present();
-  // }
 }

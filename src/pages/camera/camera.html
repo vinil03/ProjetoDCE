@@ -6,31 +6,35 @@
 
 
 <ion-content padding>
-    <div class="Imagem" id="Imagem">
-        <img src="assets/imgs/DCEcoloridoPNG.png"/>
-         <!-- <ion-list>
-            <ion-item>
-              <ion-thumbnail item-start>
-                <img src="img/thumbnail-totoro.png">
-              </ion-thumbnail>
-              <h2>My Neighbor Totoro</h2>
-              <button ion-button clear item-end>View</button>
-            </ion-item>
-          </ion-list> -->
-    </div>
+  <div class="Imagem" id="Imagem">
+    <img src="assets/imgs/DCEcoloridoPNG.png" />
+  </div>
 
-    <div class="Login-button" id="LerCodigo">
-        <button ion-button (click)="launchReader()"> Ler código de barras</button>
-        <button ion-button (click)="showPrompt()">Digitar RA</button>
-    </div>
+  <div class="Login-button" id="LerCodigo">
+    <button ion-button (click)="launchReader()"> Ler código de barras</button> <!-- trocar por icone grande -->
+    <button ion-button (click)="showPrompt()">Digitar RA</button> <!-- trocar por icone grande -->
+  </div>
 
-    <div class="Verifica" id="Verificacao">
-      <!-- If Associado, mostrar ASSOCIADO, se não mostrar não associado -->
-      
-      Associado  
-      <div class="Nome" id="Nome">
-        Nome do Aluno
-        {{RA}}
+  <div class="Verifica" id="Verificacao">
+    <div *ngIf="checkRA(); then thenBlock else elseBlock"></div>
+    <ng-template #thenBlock>
+      <div class="EstadoASS" id="EstadoASS">
+        Associado
       </div>
-    </div>
+      <div class="Nome" id="Nome">
+        {{query.name}}
+      </div>
+      <div class="RA" id="RA">
+        {{query.RA}}
+      </div>
+    </ng-template>
+    <ng-template #elseBlock>
+      <div class="EstadoNASS" id="EstadoNASS">
+        Não Associado
+      </div>
+      <div class="RA" id="RA">
+        {{query.RA}}
+      </div>
+    </ng-template>
+  </div>
 </ion-content>

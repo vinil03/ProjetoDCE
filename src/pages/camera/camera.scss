@@ -13,13 +13,26 @@ page-camera {
     margin-top: 10px;
 }
 
-#Verificacao{
-    text-align: center;
-    margin-top: 65px;
-    font-size: 60px;
-}
-
 #Nome{
     text-align: center;
     font-size: 20px;
+}
+
+#RA{
+    text-align: center;
+    font-size: 20px;
+}
+
+#EstadoASS{
+    text-align: center;
+    margin-top: 65px;
+    font-size: 45px;
+    
+}
+
+#EstadoNASS{
+    text-align: center;
+    color: rgb(255, 0, 0); //trocar
+    margin-top: 65px;
+    font-size: 45px;
 }

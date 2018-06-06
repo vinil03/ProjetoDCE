@@ -1,9 +1,11 @@
 page-login {
     text-align: center;
 
-    .logo {
-        max-width: 40%;
-        height: auto;
+    
+    #logo{
+        max-width: 80%;
+        margin-left: 37px;
+        margin-top: 10px;
     }
 
     .button-ios{
@@ -35,16 +37,4 @@ page-login {
         padding: 0 8em;
         margin-top: 15px;
     }
-    
-    #logo{
-        max-width:100%;
-        border:0;
-        text-align: center;
-    }
-
-    #img{
-        max-width: 85%;
-        border: 0;
-    }
-
 }
