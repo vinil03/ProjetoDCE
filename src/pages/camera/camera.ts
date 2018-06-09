@@ -59,7 +59,8 @@ export class CameraPage {
       inputs: [
         {
           name: 'RA',
-          placeholder: 'RA'
+          placeholder: 'RA',
+          type: 'number'
         },
       ],
       buttons: [
