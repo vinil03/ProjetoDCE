@@ -15,7 +15,7 @@ export class TabsPage {
   tab1Root = CameraPage;
   tab2Root = HistoricoPage;
 
-  constructor(public alertCtrl: AlertController ,public navCtrl: NavController) {
+  constructor(public alertCtrl: AlertController, public navCtrl: NavController) {
   }
 
 }

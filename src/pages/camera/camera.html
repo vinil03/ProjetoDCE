@@ -4,18 +4,20 @@
   </ion-navbar>
 </ion-header>
 
-
 <ion-content padding>
   <div class="Imagem" id="Imagem">
     <img src="assets/imgs/DCEcoloridoPNG.png" />
   </div>
 
   <div class="Login-button" id="LerCodigo">
-    <button ion-button (click)="launchReader()"> Ler código de barras</button> <!-- trocar por icone grande -->
-    <button ion-button (click)="showPrompt()">Digitar RA</button> <!-- trocar por icone grande -->
+    <button ion-button (click)="launchReader()"> Ler código de barras</button>
+    <!-- trocar por icone grande -->
+    <button ion-button (click)="showPrompt()">Digitar RA</button>
+    <!-- trocar por icone grande -->
   </div>
 
   <div class="Verifica" id="Verificacao">
+    <div *ngIf="queryCreated==true"></div>
     <div *ngIf="checkRA(); then thenBlock else elseBlock"></div>
     <ng-template #thenBlock>
       <div class="EstadoASS" id="EstadoASS">

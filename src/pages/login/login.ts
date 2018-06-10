@@ -19,7 +19,7 @@ export class LoginPage {
   }
 
   sendMail() {
-    window.open(`mailto:iago.regiani@dcefacamp.com`, '_system');
+    window.open('mailto:iago.regiani@dcefacamp.com', '_system');
  }
   
   ionViewDidLoad() {
