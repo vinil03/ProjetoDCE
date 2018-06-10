@@ -14,11 +14,11 @@ export class LoginPage {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
-  loadCameraPage(){
+  verifyUser(){ //substistuir por verificar login
     this.navCtrl.setRoot(CameraPage);
   }
 
-  sendMail() {
+  sendMail() { //criar uma página de cadastro
     window.open('mailto:iago.regiani@dcefacamp.com', '_system');
  }
   

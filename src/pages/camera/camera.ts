@@ -33,7 +33,6 @@ export class CameraPage {
       prompt: 'Passe o código de barras da carterinha',
       resultDisplayDuration: 0,
       preferFrontCamera: true,
-
     }
     this.barcodeScanner.scan(this.options).then(barcodeData => {
       this.createEntry(this.organizeDate(new Date()), parseInt(barcodeData.text.substring(2, 11)));
