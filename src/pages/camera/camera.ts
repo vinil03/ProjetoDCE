@@ -43,15 +43,11 @@ export class CameraPage {
   }
 
   checkRA(): boolean {
-
-
-
     //this.query.name Se existir pegar do banco, senão, colocar "não registrado".
-    this.query.setName("nome aluno");
-    //this.queries.add(this.query);
+    //this.query.setName("nome aluno");
+    this.queries.add(this.query);
     //faz a consulta no banco e popula a query list
     return true;
-
   }
 
   showPrompt() {

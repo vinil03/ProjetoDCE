@@ -15,7 +15,7 @@ export class LoginPage {
   }
 
   verifyUser(){ //substistuir por verificar login
-    this.navCtrl.setRoot(CameraPage);
+    this.navCtrl.setRoot(TabsPage);
   }
 
   sendMail() { //criar uma página de cadastro

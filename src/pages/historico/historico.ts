@@ -16,4 +16,6 @@ export class HistoricoPage {
     console.log('ionViewDidLoad HistoricoPage');
   }
 
+  
+
 }

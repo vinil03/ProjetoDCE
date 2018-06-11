@@ -5,38 +5,48 @@
 </ion-header>
 
 <ion-content padding>
-  <div class="Imagem" id="Imagem">
+  <!-- <div class="Imagem" id="Imagem">
     <img src="assets/imgs/DCEcoloridoPNG.png" />
-  </div>
+  </div> -->
 
-  <div class="Login-button" id="LerCodigo">
-    <button ion-button (click)="launchReader()"> Ler código de barras</button>
-    <!-- trocar por icone grande -->
-    <button ion-button (click)="showPrompt()">Digitar RA</button>
-    <!-- trocar por icone grande -->
+  <div class="LerCodigo" id="CodB">
+    <ion-icon (click)= "launchReader()" name="md-barcode"  id="CodBarras"></ion-icon>
+    <!-- <button ion-button (click)="launchReader()"> Ler código de barras</button> -->
+  </div>
+  <div class= "legendaImagem" id="Leg">
+      <h4>Scanear o código de barras</h4>
+  </div>
+  
+  <div class="InputCodigo" id="CodIn">
+      <ion-icon (click)= "showPrompt()" name="md-keypad" id="CodInput"></ion-icon>
+      <!-- <button ion-button (click)="showPrompt()">Digitar RA</button> -->
+  </div>
+  <div class= "legendaImagem" id="Leg1">
+      <h4>Digitar RA</h4>
   </div>
 
   <div class="Verifica" id="Verificacao">
-    <div *ngIf="queryCreated==true"></div>
-    <div *ngIf="checkRA(); then thenBlock else elseBlock"></div>
-    <ng-template #thenBlock>
-      <div class="EstadoASS" id="EstadoASS">
-        Associado
-      </div>
-      <div class="Nome" id="Nome">
-        {{query.name}}
-      </div>
-      <div class="RA" id="RA">
-        {{query.RA}}
-      </div>
-    </ng-template>
-    <ng-template #elseBlock>
-      <div class="EstadoNASS" id="EstadoNASS">
-        Não Associado
-      </div>
-      <div class="RA" id="RA">
-        {{query.RA}}
-      </div>
-    </ng-template>
+    <div *ngIf="queryCreated==true">
+      <div *ngIf="checkRA(); then thenBlock else elseBlock"></div>
+      <ng-template #thenBlock>
+        <div class="EstadoASS" id="EstadoASS">
+          Associado
+        </div>
+        <div class="Nome" id="Nome">
+          {{query.name}}
+        </div>
+        <div class="RA" id="RA">
+          {{query.RA}}
+        </div>
+      </ng-template>
+      <ng-template #elseBlock>
+        <div class="EstadoNASS" id="EstadoNASS">
+          Não Associado
+        </div>
+        <div class="RA" id="RA">
+          {{query.RA}}
+        </div>
+      </ng-template>
+    </div>
   </div>
 </ion-content>
