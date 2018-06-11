@@ -3,6 +3,10 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { HistoricoPage } from '../historico/historico';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner';
 import { TabsPage } from '../tabs/tabs';
+import { CheckerApi } from '../../shared/checker-api';
+import { Query } from '../../shared/Query';
+import { List } from '../../shared/List';
+
 
 @IonicPage()
 @Component({
@@ -19,7 +23,7 @@ export class CameraPage {
   query: Query = null;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private barcodeScanner: BarcodeScanner) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private barcodeScanner: BarcodeScanner, private checkApi: CheckerApi) {
 
   }
 
@@ -32,7 +36,7 @@ export class CameraPage {
     this.options = {
       prompt: 'Passe o código de barras da carterinha',
       resultDisplayDuration: 0,
-      preferFrontCamera: true,
+      preferFrontCamera: false,
     }
     this.barcodeScanner.scan(this.options).then(barcodeData => {
       this.createEntry(this.organizeDate(new Date()), parseInt(barcodeData.text.substring(2, 11)));
@@ -93,55 +97,4 @@ export class CameraPage {
     }
   }
 
-}
-//POSSIVELMENTE TERÁ QUE SER INJETADO
-class Query {
-  private name: string;
-  private RA: number;
-  private time: string;
-  private typer: string;
-  constructor(ra: number, time: string, name: string) {
-    this.RA = ra;
-    this.time = time;
-    this.typer = name;
-  }
-  setName(n: string) {
-    if (n.length > 20) {
-      this.name = n.substring(0, 20);
-    } else {
-      this.name = n;
-    }
-  }
-  getRA() {
-    return this.RA;
-  }
-  getName() {
-    return this.name;
-  }
-  getTime() {
-    return this.time;
-  }
-  getTyper() {
-    return this.typer;
-  }
-}
-
-class List<T> {
-  private items: Array<T>;
-
-  constructor() {
-    this.items = [];
-  }
-
-  size(): number {
-    return this.items.length;
-  }
-
-  add(value: T): void {
-    this.items.push(value);
-  }
-
-  get(index: number): T {
-    return this.items[index];
-  }
 }

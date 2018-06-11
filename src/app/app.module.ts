@@ -10,6 +10,9 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { CameraPage } from '../pages/camera/camera';
 import { LoginPage } from '../pages/login/login';
 import { HistoricoPage } from '../pages/historico/historico';
+import { HttpModule } from '@angular/http';
+import { CheckerApi } from '../shared/checker-api';
+import { IntroPage } from '../pages/intro/intro';
 
 @NgModule({
   declarations: [
@@ -17,11 +20,13 @@ import { HistoricoPage } from '../pages/historico/historico';
     TabsPage,
     CameraPage,
     LoginPage,
-    HistoricoPage
+    HistoricoPage,
+    IntroPage
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    HttpModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -29,11 +34,13 @@ import { HistoricoPage } from '../pages/historico/historico';
     TabsPage,
     CameraPage,
     LoginPage,
-    HistoricoPage
+    HistoricoPage,
+    IntroPage
   ],
   providers: [
     StatusBar,
     BarcodeScanner,
+    CheckerApi,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

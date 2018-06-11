@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 import { CameraPage } from '../camera/camera';
-import { TabsPage } from '../tabs/tabs';
+import { IntroPage } from '../intro/intro';
 
 @IonicPage()
 @Component({
@@ -15,7 +15,7 @@ export class LoginPage {
   }
 
   verifyUser(){ //substistuir por verificar login
-    this.navCtrl.setRoot(TabsPage);
+    this.navCtrl.setRoot(IntroPage);
   }
 
   sendMail() { //criar uma página de cadastro
