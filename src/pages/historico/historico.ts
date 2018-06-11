@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { query } from '@angular/core/src/animation/dsl';
 
 
 @IonicPage()
@@ -16,6 +17,9 @@ export class HistoricoPage {
     console.log('ionViewDidLoad HistoricoPage');
   }
 
-  
+  //PRECISA TESTAR
+  // getScan(){
+  //   this.navCtrl.push(query.arguments);
+  // }
 
 }
