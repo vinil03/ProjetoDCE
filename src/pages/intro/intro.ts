@@ -31,7 +31,7 @@ export class IntroPage {
         console.log("Data loaded - Loader will be dismissed", apiData)
         this.loader.dismiss();
         this.showVersion();
-      },
+      }, //fazer aqui uma condição que testa se os dados são válidos? 
         
         error => {
           this.loader.dismiss();
@@ -41,7 +41,7 @@ export class IntroPage {
   }
 
   showVersion() {
-    this.loader2 = this.loadingController.create({//mensagem de aviso de sucesso
+    this.loader2 = this.loadingController.create({//mensagem de aviso de sucesso - colocar o logo de cada atlética
       spinner: 'hide',
       content: "Versão 28/05",
       //`<div class="custom-spinner-container">
