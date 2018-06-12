@@ -22,6 +22,7 @@ export class CameraPage {
   private queryCreated: boolean = false;
   private query: Query = null;
   private database: any;
+  private name: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private barcodeScanner: BarcodeScanner, private checkApi: CheckerApi) {
     this.database = this.navParams.data;
@@ -48,11 +49,12 @@ export class CameraPage {
 
   }
 
-  checkRA(): boolean {    //faz a consulta no banco e popula a query list
+  checkRA(){    //faz a consulta no banco e popula a query list
     var index = null;
     //console.log("Objeto: ", JSON.stringify(this.query));
     var ra = this.query.getRA();
     //console.log("RA recebido: ", ra);
+    //console.log("Tamanho:", this.database.length);
     for (var i = 0; i < this.database.length; i++) {
       console.log("Database i", i, "Valor: ", this.database[i].RA, "com RA: ", ra );
       if (this.database[i].RA == ra) {
@@ -62,13 +64,21 @@ export class CameraPage {
     if (index == null) {
       this.query.setName("Não registrado");
       this.queries.add(this.query);
+      // this.name= "Não registrado";
+      // name:this.name;
+      // ({
+      //   name: "Não registrado"
+      // })
       return false;
     } else {
       this.query.setName(this.database[index].NAME);
       this.queries.add(this.query);
+      // this.name=this.query;
+      
       return true;
     }
   }
+
 
   showPrompt() {
     let prompt = this.alertCtrl.create({
@@ -112,5 +122,8 @@ export class CameraPage {
       this.queryCreated = true;
     }
   }
-
+  
+  lista(){
+    this.navCtrl.push(HistoricoPage, this.queries);
+  }
 }

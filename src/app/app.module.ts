@@ -15,6 +15,7 @@ import { CheckerApi } from '../shared/checker-api';
 import { IntroPage } from '../pages/intro/intro';
 import { Device } from '@ionic-native/device';
 
+
 @NgModule({
   declarations: [
     MyApp,

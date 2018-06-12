@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { query } from '@angular/core/src/animation/dsl';
+import { CameraPage } from '../camera/camera';
+import { Query } from '../../shared/Query';
+import { List } from '../../shared/List';
 
 
 @IonicPage()
@@ -10,7 +12,12 @@ import { query } from '@angular/core/src/animation/dsl';
 })
 export class HistoricoPage {
 
+  query: List<Query>;
+  //query = queries.getNAme();
+
   constructor(public navCtrl: NavController, public navParams: NavParams) {
+    this.query = this.navParams.data.items;
+    console.log("Queries: ",this.query);
   }
   //fazer receber queries e adiciona-las na lista
   ionViewDidLoad() {

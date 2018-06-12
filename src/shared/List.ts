@@ -13,7 +13,7 @@ export class List<T> {
         this.items.push(value);
     }
 
-    get(index: number): T {
+    getItem(index: number): T {
         return this.items[index];
     }
 }
