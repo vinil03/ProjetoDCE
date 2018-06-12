@@ -1,5 +1,3 @@
-import { Injectable } from '@angular/core';
-@Injectable()
 export class List<T> {
     private items: Array<T>;
 

@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
+import 'rxjs/add/operator/timeout';
 
 @Injectable()
 
@@ -11,10 +12,10 @@ export class CheckerApi {
     }
 
     getDataBase() {
-        return new Promise((resolve) => {
-            this.http.get(`${this.baseUrl}/ass.json`).subscribe((data) => {
+        return new Promise((resolve, reject) => {
+            this.http.get(`${this.baseUrl}/ass.json`).timeout(20000).subscribe((data) => {
                 resolve(data.json());
-            });
+            }, error => {reject()});
         });
     }
 }

@@ -15,20 +15,22 @@ import { List } from '../../shared/List';
 })
 export class CameraPage {
 
-  tab1Root = CameraPage;
-  tab2Root = HistoricoPage;
-  options: BarcodeScannerOptions;
-  queries: List<Query>;
-  queryCreated: boolean = false;
-  query: Query = null;
-
+  private tab1Root = CameraPage;
+  private tab2Root = HistoricoPage;
+  private options: BarcodeScannerOptions;
+  private queries: List<Query>;
+  private queryCreated: boolean = false;
+  private query: Query = null;
+  private database: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private barcodeScanner: BarcodeScanner, private checkApi: CheckerApi) {
-
+    this.database = this.navParams.data;
+    this.queries = new List();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CameraPage');
+    //console.log("Database: ", this.database[0]);
   }
 
   launchReader() {
@@ -46,12 +48,26 @@ export class CameraPage {
 
   }
 
-  checkRA(): boolean {
-    //this.query.name Se existir pegar do banco, senão, colocar "não registrado".
-    //this.query.setName("nome aluno");
-    this.queries.add(this.query);
-    //faz a consulta no banco e popula a query list
-    return true;
+  checkRA(): boolean {    //faz a consulta no banco e popula a query list
+    var index = null;
+    //console.log("Objeto: ", JSON.stringify(this.query));
+    var ra = this.query.getRA();
+    //console.log("RA recebido: ", ra);
+    for (var i = 0; i < this.database.length; i++) {
+      console.log("Database i", i, "Valor: ", this.database[i].RA, "com RA: ", ra );
+      if (this.database[i].RA == ra) {
+        index = i;
+      }
+    }
+    if (index == null) {
+      this.query.setName("Não registrado");
+      this.queries.add(this.query);
+      return false;
+    } else {
+      this.query.setName(this.database[index].NAME);
+      this.queries.add(this.query);
+      return true;
+    }
   }
 
   showPrompt() {

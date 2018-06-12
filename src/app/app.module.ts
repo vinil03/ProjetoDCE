@@ -13,6 +13,7 @@ import { HistoricoPage } from '../pages/historico/historico';
 import { HttpModule } from '@angular/http';
 import { CheckerApi } from '../shared/checker-api';
 import { IntroPage } from '../pages/intro/intro';
+import { Device } from '@ionic-native/device';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { IntroPage } from '../pages/intro/intro';
     StatusBar,
     BarcodeScanner,
     CheckerApi,
+    Device,
     {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })

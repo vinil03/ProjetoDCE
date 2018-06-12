@@ -1,6 +1,3 @@
-import { Injectable } from '@angular/core';
-@Injectable()
-
 export class Query {
     private name: string;
     private RA: number;
@@ -11,23 +8,23 @@ export class Query {
         this.time = time;
         this.typer = name;
     }
-    setName(n: string) {
+    public setName(n: string) {
         if (n.length > 20) {
-            this.name = n.substring(0, 20);
+            this.name = n.substring(0, 30);
         } else {
             this.name = n;
         }
     }
-    getRA() {
+    public getRA() {
         return this.RA;
     }
-    getName() {
+    public getName() {
         return this.name;
     }
-    getTime() {
+    public getTime() {
         return this.time;
     }
-    getTyper() {
+    public getTyper() {
         return this.typer;
     }
 }
