@@ -1,4 +1,3 @@
-
 <ion-header>
 
   <ion-navbar>
@@ -11,7 +10,7 @@
 <ion-content padding>
 
   <!-- PRECISA TESTAR -->
-    <!-- <div class ="Lista" id="Lista" *ngFor="dado of queries">
+  <!-- <div class ="Lista" id="Lista" *ngFor="dado of queries">
       <ion-list>
         <ion-item>
           <h2>{{queries.name}}</h2>
@@ -20,14 +19,15 @@
       </ion-list>
     </div>
      -->
-     <!-- <div class ="Lista" id="Lista" ion-item *ngFor="let dado of queries.items"> -->
-      <div>  
-      <ion-list>
-          <ion-item>
-            <h2>{{query[0].getName()}}</h2>
-            <h3>{{query[0].getRA()}}</h3>
-            <!-- <p>{{query[0].getCourse()}}</p> -->
-          </ion-item>
-        </ion-list> 
+  <div *ngIf="hasQueryList">
+    <ion-list>
+      <div class="Lista" id="Lista" ion-item *ngFor="let dado of query.items">
+        <ion-item>
+          <h2>{{dado.getName()}}</h2>
+          <h3>{{dado.getRA()}}</h3>
+          <!-- <p>{{query.getItem(0).getCourse()}}</p> -->
+        </ion-item>
       </div>
+    </ion-list>
+  </div>
 </ion-content>

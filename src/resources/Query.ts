@@ -9,7 +9,7 @@ export class Query {
         this.typer = name;
     }
     public setName(n: string) {
-        if (n.length > 20) {
+        if (n.length > 30) {
             this.name = n.substring(0, 30);
         } else {
             this.name = n;

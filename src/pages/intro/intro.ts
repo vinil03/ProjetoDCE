@@ -60,16 +60,14 @@ export class IntroPage {
     });
   }
 
-  showVersion() {
-    var version = "BD: 28/05";
-    var imagePath = "assets/imgs/DCEcoloridoPNG.png"; //mensagem de aviso de sucesso - colocar o logo de cada atlética
+  showVersion() { //mensagem de aviso de sucesso - colocar o logo de cada atlética
     this.loader2 = this.loadingController.create({
       spinner: 'hide',
-      content: '<div class="Img" id="Img"> <img src="'+imagePath+'" /> </div> <div class="ver" id="ver">'+version+'</div>',
+      content: '<div class="Img"> <img src="'+this.getImagePath()+'" /> </div> <div class="ver">'+this.checkerApi.getBDVersion(null)+'</div>',
       duration: 1800,
     });
     this.loader2.present().then(() => {
-      this.navCtrl.setRoot(TabsPage, this.dataBase);
+      this.navCtrl.setRoot(TabsPage, this.dataBase); 
     });
   }
 
@@ -86,6 +84,12 @@ export class IntroPage {
       }]
     });
     alert.present();
+  }
+
+  getImagePath(){
+    //pegar a imagem certa!!!
+    var imagePath = "assets/imgs/DCEcoloridoPNG.png"
+    return imagePath;
   }
 
   noAuthUser(){

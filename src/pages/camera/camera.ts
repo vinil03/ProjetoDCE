@@ -4,8 +4,8 @@ import { HistoricoPage } from '../historico/historico';
 import { BarcodeScanner, BarcodeScannerOptions } from '@ionic-native/barcode-scanner';
 import { TabsPage } from '../tabs/tabs';
 import { CheckerApi } from '../../shared/checker-api';
-import { Query } from '../../shared/Query';
-import { List } from '../../shared/List';
+import { Query } from '../../resources/Query';
+import { List } from '../../resources/List';
 
 
 @IonicPage()
@@ -18,20 +18,22 @@ export class CameraPage {
   private tab1Root = CameraPage;
   private tab2Root = HistoricoPage;
   private options: BarcodeScannerOptions;
-  private queries: List<Query>;
   private queryCreated: boolean = false;
   private query: Query = null;
   private database: any;
   private name: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController, private barcodeScanner: BarcodeScanner, private checkApi: CheckerApi) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
+              private barcodeScanner: BarcodeScanner, private checkApi: CheckerApi) {
     this.database = this.navParams.data;
-    this.queries = new List();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CameraPage');
     //console.log("Database: ", this.database[0]);
+    var q = new Query(200,"time","name");
+    this.checkApi.addTabData(q);
+    console.log("Q ADDED");
   }
 
   launchReader() {
@@ -42,7 +44,7 @@ export class CameraPage {
       preferFrontCamera: false,
     }
     this.barcodeScanner.scan(this.options).then(barcodeData => {
-      this.createEntry(this.organizeDate(new Date()), parseInt(barcodeData.text.substring(2, 11)));
+      this.createQuery(this.organizeDate(new Date()), parseInt(barcodeData.text.substring(2, 11)));
     }).catch(err => {
       console.log('Erro de leitura do barcode', err);
     });
@@ -63,7 +65,7 @@ export class CameraPage {
     }
     if (index == null) {
       this.query.setName("Não registrado");
-      this.queries.add(this.query);
+      this.checkApi.addTabData(this.query);
       // this.name= "Não registrado";
       // name:this.name;
       // ({
@@ -72,7 +74,7 @@ export class CameraPage {
       return false;
     } else {
       this.query.setName(this.database[index].NAME);
-      this.queries.add(this.query);
+      this.checkApi.addTabData(this.query);
       // this.name=this.query;
       
       return true;
@@ -101,7 +103,7 @@ export class CameraPage {
         {
           text: 'Buscar',
           handler: data => {
-            this.createEntry(this.organizeDate(new Date()), parseInt(data.RA));//o ideal seria checar o tamanho e caracteres indevidos
+            this.createQuery(this.organizeDate(new Date()), parseInt(data.RA));//o ideal seria checar o tamanho e caracteres indevidos
             console.log('Buscar clicked: ');
           }
         }
@@ -114,16 +116,12 @@ export class CameraPage {
     return d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "|" + d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
   }
 
-  createEntry(time: string, ra: number) {
+  createQuery(time: string, ra: number) {
     if (ra == null) {
       this.queryCreated = false;
     } else {
       this.query = new Query(ra, time, "someone"); // colocar nome do typer
       this.queryCreated = true;
     }
-  }
-  
-  lista(){
-    this.navCtrl.push(HistoricoPage, this.queries);
   }
 }
