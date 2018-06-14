@@ -31,9 +31,9 @@ export class CameraPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad CameraPage');
     //console.log("Database: ", this.database[0]);
-    var q = new Query(200,"time","name");
-    this.checkApi.addTabData(q);
-    console.log("Q ADDED");
+    //var q = new Query(200,"time","name");
+    //this.checkApi.addTabData(q);
+    //console.log("Q ADDED");
   }
 
   launchReader() {
@@ -58,7 +58,7 @@ export class CameraPage {
     //console.log("RA recebido: ", ra);
     //console.log("Tamanho:", this.database.length);
     for (var i = 0; i < this.database.length; i++) {
-      console.log("Database i", i, "Valor: ", this.database[i].RA, "com RA: ", ra );
+     // console.log("Database i", i, "Valor: ", this.database[i].RA, "com RA: ", ra );
       if (this.database[i].RA == ra) {
         index = i;
       }
@@ -66,21 +66,13 @@ export class CameraPage {
     if (index == null) {
       this.query.setName("Não registrado");
       this.checkApi.addTabData(this.query);
-      // this.name= "Não registrado";
-      // name:this.name;
-      // ({
-      //   name: "Não registrado"
-      // })
       return false;
     } else {
       this.query.setName(this.database[index].NAME);
       this.checkApi.addTabData(this.query);
-      // this.name=this.query;
-      
       return true;
     }
   }
-
 
   showPrompt() {
     let prompt = this.alertCtrl.create({
@@ -96,6 +88,7 @@ export class CameraPage {
       buttons: [
         {
           text: 'Cancelar',
+          role: 'cancel',
           handler: data => {
             console.log('Cancel clicked');
           }
@@ -103,8 +96,8 @@ export class CameraPage {
         {
           text: 'Buscar',
           handler: data => {
-            this.createQuery(this.organizeDate(new Date()), parseInt(data.RA));//o ideal seria checar o tamanho e caracteres indevidos
-            console.log('Buscar clicked: ');
+            this.createQuery(this.organizeDate(new Date()), parseInt(data.RA));
+            console.log('Buscar clicked: ', data.RA);
           }
         }
       ]
@@ -116,8 +109,9 @@ export class CameraPage {
     return d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "|" + d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
   }
 
-  createQuery(time: string, ra: number) {
-    if (ra == null) {
+  createQuery(time: string, ra: number) { //o ideal seria checar o tamanho e caracteres indevidos, se tiver, nullar
+    console.log("Query created");
+    if (ra == null || ra<200000000 || isNaN(ra) || ra>205000000) {
       this.queryCreated = false;
     } else {
       this.query = new Query(ra, time, "someone"); // colocar nome do typer

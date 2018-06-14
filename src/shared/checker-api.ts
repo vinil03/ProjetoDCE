@@ -18,15 +18,11 @@ export class CheckerApi {
     }
 
     getDataBase() { //Fazer um método que carrega todo o BD e dps divide em Atléticas
-        if (this.dataBase == null) {
             return new Promise((resolve, reject) => {
                 this.http.get(`${this.baseUrl}/ass.json`).timeout(20000).subscribe((data) => {
                     resolve(data.json());
                 }, error => { reject() });
             });
-        } else {
-            return this.dataBase;
-        }
     }
 
     getTabData(){
@@ -35,10 +31,6 @@ export class CheckerApi {
 
     addTabData(q: Query){
         this.tabData.add(q);
-    }
-
-    private organizeData(){ //chamar uma vez durante a instancia do singleton
-
     }
 
     getAtleticaData(s: string){ //fazer um enum? para receber como nome da atlética? -- fazer versão de dados de cada uma
