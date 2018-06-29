@@ -19,6 +19,7 @@ export class CameraPage {
   private tab2Root = HistoricoPage;
   private options: BarcodeScannerOptions;
   private queryCreated: boolean = false;
+  private isAss: boolean = false;
   private query: Query = null;
   private database: any;
   private name: any;
@@ -26,6 +27,7 @@ export class CameraPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
               private barcodeScanner: BarcodeScanner, private checkApi: CheckerApi) {
     this.database = this.navParams.data;
+    // this.checkRA();
   }
 
   ionViewDidLoad() {
@@ -45,6 +47,7 @@ export class CameraPage {
     }
     this.barcodeScanner.scan(this.options).then(barcodeData => {
       this.createQuery(this.organizeDate(new Date()), parseInt(barcodeData.text.substring(2, 11)));
+      this.checkRA();
     }).catch(err => {
       console.log('Erro de leitura do barcode', err);
     });
@@ -52,24 +55,31 @@ export class CameraPage {
   }
 
   checkRA(){    //faz a consulta no banco e popula a query list
+    //checar de query é nula
     var index = null;
-    //console.log("Objeto: ", JSON.stringify(this.query));
+    console.log("Entrou: ");
     var ra = this.query.getRA();
     //console.log("RA recebido: ", ra);
     //console.log("Tamanho:", this.database.length);
+
     for (var i = 0; i < this.database.length; i++) {
-     // console.log("Database i", i, "Valor: ", this.database[i].RA, "com RA: ", ra );
+    console.log("Database i", i, "Valor: ", this.database[i].RA, "com RA: ", ra );
       if (this.database[i].RA == ra) {
         index = i;
+        break;
       }
     }
     if (index == null) {
       this.query.setName("Não registrado");
+      this.isAss = false;
       this.checkApi.addTabData(this.query);
+      //this.queryCreated = false;
       return false;
     } else {
       this.query.setName(this.database[index].NAME);
+      this.isAss = true;
       this.checkApi.addTabData(this.query);
+      //this.queryCreated = false;
       return true;
     }
   }
@@ -98,6 +108,8 @@ export class CameraPage {
           handler: data => {
             this.createQuery(this.organizeDate(new Date()), parseInt(data.RA));
             console.log('Buscar clicked: ', data.RA);
+            this.checkRA();
+            console.log('Fechou ');
           }
         }
       ]
@@ -113,6 +125,7 @@ export class CameraPage {
     console.log("Query created");
     if (ra == null || ra<200000000 || isNaN(ra) || ra>205000000) {
       this.queryCreated = false;
+      this.query = null;
     } else {
       this.query = new Query(ra, time, "someone"); // colocar nome do typer
       this.queryCreated = true;
