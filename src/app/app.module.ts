@@ -14,6 +14,7 @@ import { HttpModule } from '@angular/http';
 import { CheckerApi } from '../shared/checker-api';
 import { IntroPage } from '../pages/intro/intro';
 import { Device } from '@ionic-native/device';
+import { AuthProvider } from '../providers/auth/auth';
 
 
 @NgModule({
@@ -44,7 +45,8 @@ import { Device } from '@ionic-native/device';
     BarcodeScanner,
     CheckerApi,
     Device,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    AuthProvider
   ]
 })
 export class AppModule {}

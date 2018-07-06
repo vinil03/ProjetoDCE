@@ -25,17 +25,12 @@ export class CameraPage {
   private name: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
-              private barcodeScanner: BarcodeScanner, private checkApi: CheckerApi) {
+    private barcodeScanner: BarcodeScanner, private checkApi: CheckerApi) {
     this.database = this.navParams.data;
-    // this.checkRA();
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad CameraPage');
-    //console.log("Database: ", this.database[0]);
-    //var q = new Query(200,"time","name");
-    //this.checkApi.addTabData(q);
-    //console.log("Q ADDED");
   }
 
   launchReader() {
@@ -54,33 +49,33 @@ export class CameraPage {
 
   }
 
-  checkRA(){    //faz a consulta no banco e popula a query list
-    //checar de query é nula
-    var index = null;
-    console.log("Entrou: ");
-    var ra = this.query.getRA();
-    //console.log("RA recebido: ", ra);
-    //console.log("Tamanho:", this.database.length);
+  checkRA() {    //faz a consulta no banco e popula a query list
+    if (this.query != null) {
 
-    for (var i = 0; i < this.database.length; i++) {
-    console.log("Database i", i, "Valor: ", this.database[i].RA, "com RA: ", ra );
-      if (this.database[i].RA == ra) {
-        index = i;
-        break;
+      var index = null;
+      console.log("Entrou: ");
+      var ra = this.query.getRA();
+
+
+      for (var i = 0; i < this.database.length; i++) {
+        //console.log("Database i", i, "Valor: ", this.database[i].RA, "com RA: ", ra );
+        if (this.database[i].RA == ra) {
+          index = i;
+          break;
+        }
       }
-    }
-    if (index == null) {
-      this.query.setName("Não registrado");
-      this.isAss = false;
-      this.checkApi.addTabData(this.query);
-      //this.queryCreated = false;
-      return false;
-    } else {
-      this.query.setName(this.database[index].NAME);
-      this.isAss = true;
-      this.checkApi.addTabData(this.query);
-      //this.queryCreated = false;
-      return true;
+      // verificar queryCreated
+      if (index == null) {
+        this.query.setName("Não registrado");
+        this.isAss = false;
+        this.checkApi.addTabData(this.query);
+        return false;
+      } else {
+        this.query.setName(this.database[index].NAME);
+        this.isAss = true;
+        this.checkApi.addTabData(this.query);
+        return true;
+      }
     }
   }
 
@@ -105,10 +100,15 @@ export class CameraPage {
         },
         {
           text: 'Buscar',
-          handler: data => {
-            this.createQuery(this.organizeDate(new Date()), parseInt(data.RA));
+          handler: data => {            
+            var nun = data.RA;
+            console.log("nun: ", nun);
+            var txt = nun.replace(/\D+/g,"");
+            console.log("txt: ", txt);
+            console.log("Number: ", parseInt(txt));
+            //this.createQuery(this.organizeDate(new Date()),nun);
             console.log('Buscar clicked: ', data.RA);
-            this.checkRA();
+            //this.checkRA();
             console.log('Fechou ');
           }
         }
@@ -122,10 +122,10 @@ export class CameraPage {
   }
 
   createQuery(time: string, ra: number) { //o ideal seria checar o tamanho e caracteres indevidos, se tiver, nullar
-    console.log("Query created");
-    if (ra == null || ra<200000000 || isNaN(ra) || ra>205000000) {
+    console.log("Query created: ", ra);
+    if (ra == null || ra < 200000000 || isNaN(ra) || ra > 205000000) {
       this.queryCreated = false;
-      this.query = null;
+      //this.query = null;
     } else {
       this.query = new Query(ra, time, "someone"); // colocar nome do typer
       this.queryCreated = true;

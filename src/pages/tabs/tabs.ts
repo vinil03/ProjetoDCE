@@ -14,7 +14,5 @@ export class TabsPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.tab1Params = this.navParams.data;
-    console.log("tab1ParamsSize: ", this.navParams.data.length);
-    console.log("tab1Params: ", this.tab1Params[0]);
   }
 }
