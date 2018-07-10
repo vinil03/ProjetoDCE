@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Loading, AlertController, LoadingController } from 'ionic-angular';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { CameraPage } from '../camera/camera';
 import { IntroPage } from '../intro/intro';
+import { AuthProvider } from '../../providers/auth/auth';
+import { EmailValidator } from '../../validators/email';
+//import { AngularFireAuth } from 'angularfire2/auth';
 
 @IonicPage()
 @Component({
@@ -11,27 +15,100 @@ import { IntroPage } from '../intro/intro';
 })
 export class LoginPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  public loginForm: FormGroup;
+  public loading: Loading;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public authProvider: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public formBuilder: FormBuilder){//, public afAuth: AngularFireAuth) {
+
+    this.loginForm = formBuilder.group({
+      email: ['',
+        Validators.compose([Validators.required, EmailValidator.isValid])],
+      password: ['',
+        Validators.compose([Validators.minLength(6), Validators.required])]
+    });
   }
 
-  verifyUser(){ //substistuir por verificar login
-    this.navCtrl.setRoot(IntroPage);
+  verifyUser() { //substistuir por verificar login
+    if (!this.loginForm.valid) {
+      console.log(this.loginForm.value);
+    } else {
+      this.authProvider.loginUser(this.loginForm.value.email,
+        this.loginForm.value.password)
+        .then(authData => {
+          this.loading.dismiss().then(() => {
+            this.navCtrl.setRoot(IntroPage);
+          });
+        }, error => {
+          this.loading.dismiss().then(() => {
+            let alert = this.alertCtrl.create({
+              message: error.message,
+              buttons: [
+                {
+                  text: "Ok",
+                  role: 'cancel'
+                }
+              ]
+            });
+            alert.present();
+          });
+        });
+      this.loading = this.loadingCtrl.create();
+      this.loading.present();
+    }
+
   }
 
-  sendMail() { //criar uma página de cadastro
-    window.open('mailto:iago.regiani@dcefacamp.com', '_system');
- }
-  
+  createLogin() {
+    this.navCtrl.push('SignupPage');
+  }
+
+  verifyUser_FB() { //substistuir por verificar login
+
+  }
+
+  verifyUser_G() {
+    /*this.signInWithGoogle()
+      .then(
+        () => this.navCtrl.setRoot(IntroPage),
+        error => console.log(error.message)
+      );
+      */
+
+  }
+
+
+  sendPassword() {
+    this.navCtrl.push('ResetPasswordPage');
+  }
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }
 
-  sendLogin(){
-
+  /*private signInWithGoogle() {
+    console.log('Sign in with google');
+    return this.oauthSignIn(new firebase.auth.GoogleAuthProvider());
   }
 
-  sendPassword(){
+  private oauthSignIn(provider: GoogleAuthProvider) {
+    if (!(<any>window).cordova) {
+      return this.afAuth.auth.signInWithPopup(provider);
+    } else {
+      return this.afAuth.auth.signInWithRedirect(provider)
+        .then(() => {
+          return this.afAuth.auth.getRedirectResult().then(result => {
+            // This gives you a Google Access Token.
+            // You can use it to access the Google API.
+            let token = result.credential.accessToken;
+            // The signed-in user info.
+            let user = result.user;
+            console.log(token, user);
+          }).catch(function (error) {
+            // Handle Errors here.
+            alert(error.message);
+          });
+        });
+    }
+  }*/
 
-  }
-  
 }

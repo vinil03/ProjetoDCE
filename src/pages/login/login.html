@@ -10,19 +10,25 @@
   <ion-list>
        <ion-item>
          <ion-label floating>Usuário</ion-label>
-         <ion-input type="text"></ion-input>
+         <ion-input formControlName="email" type="email" placeholder="Email" [class.invalid]="!loginForm.controls.email.valid && blur"></ion-input>
        </ion-item>
      
        <ion-item>
          <ion-label floating>Senha</ion-label>
-         <ion-input type="password"></ion-input>
+         <ion-input formControlName="password" type="password" placeholder="Senha" [class.invalid]="!loginForm.controls.password.valid && blur"></ion-input>
        </ion-item>
        
        <div class="Login-button">
-          <button ion-button (click)="verifyUser()">Login</button>
+          <button ion-button (click)="verifyUser()" [disabled]="!loginForm.valid">Login </button>
       </div>
       <div class="Sem-login">
-        <button ion-button clear (click)= "sendMail">Não tenho Login</button>
+        <button ion-button outline (click)= "createLogin()">Não tenho Login</button>
+      </div>
+      <div class="Facebook-login"> <!-- Corrigir formato -->>
+        <button ion-button (click)= "verifyUser_FB()">Login com Facebook</button>
+      </div>
+      <div class="Google-login"> <!-- Corrigir formato -->>
+        <button ion-button (click)= "verifyUser_G()">Login com Google</button>
       </div>
   </ion-list>
 </ion-content>

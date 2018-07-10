@@ -63,7 +63,7 @@ export class IntroPage {
   showVersion() { //mensagem de aviso de sucesso - colocar o logo de cada atlética
     this.loader2 = this.loadingController.create({
       spinner: 'hide',
-      content: '<div class="Img"> <img src="'+this.getImagePath()+'" /> </div> <div class="ver">'+this.checkerApi.getBDVersion(null)+'</div>',
+      content: '<div class="Img"> <img src="'+this.getImagePath()+'" /> </div> <div class="ver">'+this.checkerApi.getBDVersion(null)+'</div>', //corrigir
       duration: 1800,
     });
     this.loader2.present().then(() => {
@@ -88,8 +88,13 @@ export class IntroPage {
 
   getImagePath(){
     //pegar a imagem certa!!!
-    var imagePath = "assets/imgs/DCEcoloridoPNG.png"
-    return imagePath;
+    var DCE = "assets/imgs/DCEcoloridoPNG.png";
+    var XIX = "assets/imgs/Atleticas/ADM_ECO.png";
+    var DIR = "assets/imgs/Atleticas/DIR.png";
+    var ENG = "assets/imgs/Atleticas/ENG.png";
+    var PPM = "assets/imgs/Atleticas/PPM.png";
+    var RI = "assets/imgs/Atleticas/RI.png";
+    return DCE; //corrigir
   }
 
   noAuthUser(){

@@ -64,7 +64,7 @@ export class CameraPage {
           break;
         }
       }
-      // verificar queryCreated
+      // verificar queryCreated 
       if (index == null) {
         this.query.setName("Não registrado");
         this.isAss = false;

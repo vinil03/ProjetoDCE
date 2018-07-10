@@ -1,5 +1,8 @@
 page-login {
     text-align: center;
+    .invalid {
+        border-bottom: 1px solid #ff6153;
+      }
 
     
     #logo{
