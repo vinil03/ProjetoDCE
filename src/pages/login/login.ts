@@ -6,6 +6,8 @@ import { CameraPage } from '../camera/camera';
 import { IntroPage } from '../intro/intro';
 import { AuthProvider } from '../../providers/auth/auth';
 import { EmailValidator } from '../../validators/email';
+import { ResetPasswordPage } from '../../pages/reset-password/reset-password';
+import { SignupPage } from '../../pages/signup/signup';
 //import { AngularFireAuth } from 'angularfire2/auth';
 
 @IonicPage()
@@ -59,7 +61,7 @@ export class LoginPage {
   }
 
   createLogin() {
-    this.navCtrl.push('SignupPage');
+    this.navCtrl.push(SignupPage);
   }
 
   verifyUser_FB() { //substistuir por verificar login
@@ -76,9 +78,8 @@ export class LoginPage {
 
   }
 
-
-  sendPassword() {
-    this.navCtrl.push('ResetPasswordPage');
+  resetPassword() {
+    this.navCtrl.push(ResetPasswordPage);
   }
 
   ionViewDidLoad() {

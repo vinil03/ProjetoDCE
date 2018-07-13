@@ -15,6 +15,8 @@ import { CheckerApi } from '../shared/checker-api';
 import { IntroPage } from '../pages/intro/intro';
 import { Device } from '@ionic-native/device';
 import { AuthProvider } from '../providers/auth/auth';
+import { ResetPasswordPage } from '../pages/reset-password/reset-password';
+import { SignupPage } from '../pages/signup/signup';
 
 
 @NgModule({
@@ -24,7 +26,9 @@ import { AuthProvider } from '../providers/auth/auth';
     CameraPage,
     LoginPage,
     HistoricoPage,
-    IntroPage
+    SignupPage,
+    ResetPasswordPage,
+    IntroPage,
   ],
   imports: [
     BrowserModule,
@@ -38,6 +42,8 @@ import { AuthProvider } from '../providers/auth/auth';
     CameraPage,
     LoginPage,
     HistoricoPage,
+    SignupPage,
+    ResetPasswordPage,
     IntroPage
   ],
   providers: [
@@ -45,6 +51,7 @@ import { AuthProvider } from '../providers/auth/auth';
     BarcodeScanner,
     CheckerApi,
     Device,
+    AuthProvider,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider
   ]
