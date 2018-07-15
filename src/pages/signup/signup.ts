@@ -26,10 +26,11 @@ export class SignupPage {
   };
   constructor(public navCtrl: NavController, public authProvider: AuthProvider, public formBuilder: FormBuilder, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
       this.signupForm = formBuilder.group({
-        email: ['',
-          Validators.compose([Validators.required, EmailValidator.isValid])],
-        password: ['',
-          Validators.compose([Validators.minLength(6), Validators.required])]
+        email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
+        password: ['',Validators.compose([Validators.minLength(6), Validators.required])],
+        name: ['',Validators.compose([Validators.minLength(6), Validators.required])],
+        instituicao: ['',Validators.compose([Validators.minLength(6), Validators.required])],
+        cargo: ['',Validators.compose([Validators.minLength(6), Validators.required])]
       });
     }
 

@@ -26,6 +26,7 @@ export class AuthProvider {
             role: cargo,
             email: email,
             admin: false, //por padrão é uma conta comum
+            verified: false, //por padrão, não tem autorização do admin para acessar
             key: newUser.key,
             deviceInfo: deviceInfo
           });
