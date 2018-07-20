@@ -2,4 +2,9 @@ page-signup {
     .invalid {
         border-bottom: 1px solid #ff6153;
       }
+
+      .errorMessage{
+        font-size: 7px;
+        color: #ff6153;
+      }
 }

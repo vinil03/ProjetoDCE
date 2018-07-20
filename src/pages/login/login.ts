@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Loading, AlertController, LoadingController } from 'ionic-angular';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
-import { CameraPage } from '../camera/camera';
 import { IntroPage } from '../intro/intro';
 import { AuthProvider } from '../../providers/auth/auth';
 import { EmailValidator } from '../../validators/email';
@@ -30,7 +29,7 @@ export class LoginPage {
     });
   }
 
-  verifyUser() { //substistuir por verificar login
+  verifyUser() {
     if (!this.loginForm.valid) {
       console.log(this.loginForm.value);
     } else {
@@ -40,7 +39,7 @@ export class LoginPage {
           this.loading.dismiss().then(() => {
             this.navCtrl.setRoot(IntroPage);
           });
-        }, error => {
+        }, error => { // mensagens de erro n estão sendo mostradas
           this.loading.dismiss().then(() => {
             let alert = this.alertCtrl.create({
               message: error.message,

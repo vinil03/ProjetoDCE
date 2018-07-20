@@ -5,6 +5,7 @@ import { CheckerApi } from '../../shared/checker-api';
 import { Platform } from 'ionic-angular';
 import { LoginPage } from '../login/login';
 import { Device } from '@ionic-native/device';
+import firebase from 'firebase';
 
 @IonicPage()
 @Component({
@@ -16,12 +17,8 @@ export class IntroPage {
   private loader: any;
   private loader2: any;
   private dataBase: {};
-  private userInfo: {
-    name: "";
-    inst: "";  //pertence a qual atletica?
-    level: 0; //definir se é admin ou só reader | 0 = reader
-  };
-  private celInfo: { //desassociar do usuário para poder efetuar a troca
+  private userInstitution: any;
+  private deviceInfo: { //desassociar do usuário para poder efetuar a troca
     uuid: "",
     model: "",
     manufacturer: "",
@@ -30,74 +27,145 @@ export class IntroPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private loadingController:
     LoadingController, private checkerApi: CheckerApi, public alertCtrl: AlertController, public platform: Platform,
     private device: Device) {
-      //this.celInfo.uuid=this.device.uuid;
-      //this.celInfo.model=this.device.model;
-      //this.celInfo.manufacturer=this.device.manufacturer;
-      console.log("UID: ", this.device.uuid, "Modelo: ", this.device.model, "Fabricante: ", this.device.manufacturer) 
+    //this.celInfo.uuid=this.device.uuid;
+    //this.celInfo.model=this.device.model;
+    //this.celInfo.manufacturer=this.device.manufacturer;
+    console.log("UID: ", this.device.uuid, "Modelo: ", this.device.model, "Fabricante: ", this.device.manufacturer)
   }
 
   ionViewDidLoad() {
     //verificar se celInfo é diferente do que está no servidor
     // No primeiro login mandar para auth, depois verificar se é igual, se for pode chamar loadData, senão noAuthUser() 
     console.log('ionViewDidLoad IntroPage');
-    this.loadData();
-    
-  }
+    this.UserIsVerified().then(data => {
+      this.loadData();
+    })
+    .catch(error =>{      
+        this.errorMsg(error);      
+    });
+}
 
-  loadData(){
-    this.loader = this.loadingController.create({ content: "Carregando..."});
+errorMsg(msg: string) {
+  let alert = this.alertCtrl.create({
+    title: 'Erro',
+    subTitle: msg,
+    buttons: [{
+      text: 'OK',
+      handler: () => {
+        this.platform.exitApp();
+      }
+    }]
+  });
+  alert.present();
+}
+
+getImagePath() {
+  var DCE = "assets/imgs/DCEcoloridoPNG.png";
+  var XIX = "assets/imgs/Atleticas/ADM_ECO.png";
+  var DIR = "assets/imgs/Atleticas/DIR.png";
+  var ENG = "assets/imgs/Atleticas/ENG.png";
+  var PPM = "assets/imgs/Atleticas/PPM.png";
+  var RI = "assets/imgs/Atleticas/RI.png";
+  var res = DCE;
+  switch (this.userInstitution) {
+    case "A.A.A. Adhemar F. da Silva": {
+      res = RI;
+      break;
+    }
+    case "A.A.A. PPM": {
+      res = PPM;
+      break;
+    }
+    case "A.A.A. XX de Março": {
+      console.log("fds");
+      break;
+    }
+    case "A.A.A. XXVIII de Maio": {
+      res = ENG;
+      break;
+    }
+    case "A.A.A. XIX de Abril": {
+      res = XIX;
+      break;
+    }
+    case "DCE Celso Furtado": {
+      res = DCE;
+      break;
+    }
+  }
+  return res;
+}
+
+UserIsVerified() {
+  return new Promise((resolve, reject) => {
+    this.loader = this.loadingController.create({ content: "Verificando credencial..." });
     this.loader.present().then(() => {
-      this.checkerApi.getDataBase().then(apiData => {
-        this.dataBase = apiData;
-        console.log("Data loaded - Loader will be dismissed", apiData)
-        this.loader.dismiss();
-        this.showVersion();
-      },         
-        error => { //O ideal vai ser usar uma versão menos atualizada dos dados locais
+      var uid = firebase.auth().currentUser.uid
+      this.checkerApi.getUserData(uid).then(userData => {
+        var isOkay = true;
+        console.log("User Information loaded: ", userData);
+        
+        console.log("AUTHORIZED?",!userData.verified==false);
+        //carregar valores locais com os dados do usuário
+        if(userData==null){
+          console.log("1");
+          isOkay = false;
           this.loader.dismiss();
-          this.errorMsg();
-        })
-    });
-  }
-
-  showVersion() { //mensagem de aviso de sucesso - colocar o logo de cada atlética
-    this.loader2 = this.loadingController.create({
-      spinner: 'hide',
-      content: '<div class="Img"> <img src="'+this.getImagePath()+'" /> </div> <div class="ver">'+this.checkerApi.getBDVersion(null)+'</div>', //corrigir
-      duration: 1800,
-    });
-    this.loader2.present().then(() => {
-      this.navCtrl.setRoot(TabsPage, this.dataBase); 
-    });
-  }
-
-
-  errorMsg() {
-    let alert = this.alertCtrl.create({
-      title: 'Erro de conexão',
-      subTitle: 'Não foi possível estabelecer conexão com o servidor remoto. Tente novamente',
-      buttons: [{
-        text: 'OK',
-        handler: () => {
-          this.navCtrl.setRoot(LoginPage);
+          reject(new Error("Usuário com erro nos dados. Fale para o admisntrador verificar o banco"));
         }
-      }]
+        this.userInstitution = userData.institution;
+        if(userData.verified==false){
+          console.log("2");
+          isOkay = false;
+          this.loader.dismiss();
+          reject(new Error("Usuário não autorizado. Entre em contato com o administrador"));
+        }
+        if(userData.deviceInfo!=this.deviceInfo &&  userData.deviceInfo!= "null"){
+          console.log("3");
+          isOkay = false;
+          this.loader.dismiss();
+          reject(new Error("Dispositivo não autorizado. Entre em contato com o administrador"));
+        }
+        if(userData.deviceInfo== null){ // troca de dispositivo - cadastrar o novo
+
+        }
+        console.log("4");
+        if(isOkay){
+        this.loader.dismiss();
+        resolve();
+        }
+      },
+        error => {
+          console.log("5");
+          this.loader.dismiss();
+          this.errorMsg('Não foi possível estabelecer conexão com o servidor remoto. Tente novamente');
+        }
+      )
     });
-    alert.present();
+  });
   }
 
-  getImagePath(){
-    //pegar a imagem certa!!!
-    var DCE = "assets/imgs/DCEcoloridoPNG.png";
-    var XIX = "assets/imgs/Atleticas/ADM_ECO.png";
-    var DIR = "assets/imgs/Atleticas/DIR.png";
-    var ENG = "assets/imgs/Atleticas/ENG.png";
-    var PPM = "assets/imgs/Atleticas/PPM.png";
-    var RI = "assets/imgs/Atleticas/RI.png";
-    return DCE; //corrigir
-  }
+loadData() {
+  this.loader = this.loadingController.create({ content: "Carregando..." });
+  this.loader.present().then(() => {
+    this.checkerApi.getDataBase().then(apiData => {
+      this.dataBase = apiData;
+      console.log("BD loaded - Loader will be dismissed", this.dataBase)
+      this.loader.dismiss();
+      this.showVersion();
+    })
+  });
+}
 
-  noAuthUser(){
-    //pegar dados do usuário sem cadastro e mandar para avaliação
-  }
+showVersion() {  
+  this.loader2 = this.loadingController.create({
+    spinner: 'hide',
+    content: '<div class="Img"> <img src="' + this.getImagePath() + '" /> </div> <div class="ver">' + this.checkerApi.getBDVersion(null) + '</div>', //corrigir
+    duration: 1800,
+  });
+  this.loader2.present().then(() => {
+    // start session counter  - IMPLEMENTAR
+    this.navCtrl.setRoot(TabsPage, this.dataBase); //passar os dados do usário
+  });
+}
 }

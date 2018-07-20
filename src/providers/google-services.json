@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1021352355630",
+    "firebase_url": "https://dcechecker.firebaseio.com",
+    "project_id": "dcechecker",
+    "storage_bucket": "dcechecker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1021352355630:android:9e9b4dab7ec468bd",
+        "android_client_info": {
+          "package_name": "io.DCE.checker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1021352355630-2881cr227vbrtb9k9umkscho6a7o3tcu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCj5WSgjZr003obehqUQBx4tsXeznckviM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

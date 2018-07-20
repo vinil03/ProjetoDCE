@@ -3,7 +3,8 @@
     <ion-item>
       <ion-label stacked>Nome</ion-label>
         <ion-input formControlName="name" type="text" placeholder="Jose da Silva Junior"></ion-input> -->
-   </ion-item>
+        <div class = "errorMessage">{{messageName}}</div>
+      </ion-item>
 
     <ion-item>
       <ion-label stacked>Instituição</ion-label>
@@ -26,11 +27,13 @@
     <ion-item>
       <ion-label stacked>Email</ion-label>
       <ion-input formControlName="email" type="email" placeholder="josedasilva@emalgumlugar.com.br" [class.invalid]="!signupForm.controls.email.valid && blur"></ion-input>
+      <div class = "errorMessage">{{messageEmail}}</div>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>Password</ion-label>
       <ion-input formControlName="password" type="password" [class.invalid]="!signupForm.controls.password.valid && blur"></ion-input>
+      <div class = "errorMessage">{{messagePassword}}</div>
     </ion-item>
 
     <button ion-button block type="submit" [disabled]="!signupForm.valid">

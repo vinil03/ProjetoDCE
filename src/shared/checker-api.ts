@@ -7,7 +7,8 @@ import { Query } from '../resources/Query';
 @Injectable()
 
 export class CheckerApi {
-    
+  
+      
     private baseUrl = 'https://dcechecker.firebaseio.com';
     private dataBase = null;
     private tabData: List<Query>;
@@ -17,13 +18,22 @@ export class CheckerApi {
         this.tabData = new List();
     }
 
-    getDataBase() { //Fazer um método que carrega todo o BD e dps divide em Atléticas
+    getDataBase() {
             return new Promise((resolve, reject) => {
-                this.http.get(`${this.baseUrl}/ass.json`).timeout(20000).subscribe((data) => {
+                this.http.get(`${this.baseUrl}/associates.json`).subscribe((data) => {
                     resolve(data.json());
-                }, error => { reject() });
+                });
             });
     }
+
+    getUserData(uid: string) {
+        return new Promise((resolve, reject) => {
+            console.log("UID: ", uid );
+            this.http.get(`${this.baseUrl}/userProfile/`+uid+`/.json`).timeout(20000).subscribe((data) => {
+                resolve(data.json());
+            }, error => { reject() });
+        });
+      }
 
     getTabData(){
         return this.tabData;
@@ -33,12 +43,7 @@ export class CheckerApi {
         this.tabData.add(q);
     }
 
-    getAtleticaData(s: string){ //fazer um enum? para receber como nome da atlética? -- fazer versão de dados de cada uma
-
-    }
-
     getBDVersion(s: string){ // fazer versão de dados de cada uma
         return "BD: 28/05";
     }
-
 }

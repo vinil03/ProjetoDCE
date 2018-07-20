@@ -5,7 +5,7 @@ import firebase from 'firebase';
 export class AuthProvider {
 
   constructor() {
-    console.log('Hello AuthProvider Provider');
+    console.log('Hello AuthProvider');
   }
 
 
@@ -13,23 +13,31 @@ export class AuthProvider {
     return firebase.auth().signInWithEmailAndPassword(email, password);
   }
 
-  signupUser(email: string, password: string, nome: string, cargo: string, instituicao: string, deviceInfo: { uuid: string, model: string, manufacturer: string }): Promise<any> { //fazer uma verificação de senha fraca? Usar regex?
+  signupUser(email: string, password: string, nome: string, cargo: string, instituicao: string, deviceInfo: any): Promise<any> { //fazer uma verificação de senha fraca? Usar regex?
     return firebase
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        let newUser = firebase.database().ref('/userProfile').push();
+        firebase.database().ref('/userProfile/'+firebase.auth().currentUser.uid).set({
+          "name": nome,
+          "institution": instituicao,
+          "role": cargo,
+          "email": email,
+          "admin": false, //por padrão é uma conta comum
+          "verified": false, //por padrão, não tem autorização do admin para acessar
+          "deviceInfo": deviceInfo
+      });
+        /*let newUser = firebase.database().ref('/userProfile').push();
         newUser.set
           ({
-            name: nome,
-            institution: instituicao,
-            role: cargo,
-            email: email,
-            admin: false, //por padrão é uma conta comum
-            verified: false, //por padrão, não tem autorização do admin para acessar
-            key: newUser.key,
-            deviceInfo: deviceInfo
-          });
+            "name": nome,
+            "institution": instituicao,
+            "role": cargo,
+            "email": email,
+            "admin": false, //por padrão é uma conta comum
+            "verified": false, //por padrão, não tem autorização do admin para acessar
+            "deviceInfo": deviceInfo
+          });*/
       });
   }
 
@@ -41,4 +49,4 @@ export class AuthProvider {
   logoutUser(): Promise<void> {
     return firebase.auth().signOut();
   }
-}
+ }

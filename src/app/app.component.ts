@@ -2,8 +2,6 @@ import { Component } from '@angular/core';
 import { Platform, Tabs } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { IntroPage } from '../pages/intro/intro';
-
-import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage } from '../pages/login/login';
 import firebase from 'firebase';
 
