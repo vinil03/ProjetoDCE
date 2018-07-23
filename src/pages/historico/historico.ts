@@ -29,8 +29,15 @@ export class HistoricoPage {
 
   ionViewWillEnter(){
     console.log('Will load');
-    console.log('Data size',this.chkApi.getTabData().size());
-    console.log('Data item',this.chkApi.getTabData().getItem(0));
     this.query = this.chkApi.getTabData();
+  }
+
+  search(){
+    var userData = this.chkApi.getUserData;
+    if(userData.institution = "DCE" || userData.searchAuth == true){ 
+    //mostrar calendário para realizar busca.
+    // Se autorizado, pode incluir outras instituiçoes por um tempo que deve ser buscado do firebase - fazer exceção para DCE
+  }else{
+
   }
 }
