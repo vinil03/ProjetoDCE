@@ -18,7 +18,7 @@ export class IntroPage {
   private loader2: any;
   private dataBase: {};
   private userInstitution: any;
-  private deviceInfo: { //desassociar do usuário para poder efetuar a troca
+  private deviceInfo: any = { //desassociar do usuário para poder efetuar a troca
     uuid: "",
     model: "",
     manufacturer: "",
@@ -27,11 +27,10 @@ export class IntroPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, private loadingController:
     LoadingController, private checkerApi: CheckerApi, public alertCtrl: AlertController, public platform: Platform,
     private device: Device) {
-    //this.celInfo.uuid=this.device.uuid;
-    //this.celInfo.model=this.device.model;
-    //this.celInfo.manufacturer=this.device.manufacturer;
-    console.log("UID: ", this.device.uuid, "Modelo: ", this.device.model, "Fabricante: ", this.device.manufacturer)
-  }
+    this.deviceInfo.uuid=this.device.uuid;
+    this.deviceInfo.model=this.device.model;
+    this.deviceInfo.manufacturer=this.device.manufacturer;
+    }
 
   ionViewDidLoad() {
     //verificar se celInfo é diferente do que está no servidor
@@ -101,27 +100,23 @@ UserIsVerified() {
     this.loader = this.loadingController.create({ content: "Verificando credencial..." });
     this.loader.present().then(() => {
       var uid = firebase.auth().currentUser.uid
-      this.checkerApi.getUserData(uid).then(userData => {
+      this.checkerApi.getUserData(uid).then((userData: any) => {
         var isOkay = true;
         console.log("User Information loaded: ", userData);
-        
         console.log("AUTHORIZED?",!userData.verified==false);
         //carregar valores locais com os dados do usuário
-        if(userData==null){
-          console.log("1");
+        if(userData==null && isOkay){
           isOkay = false;
           this.loader.dismiss();
           reject(new Error("Usuário com erro nos dados. Fale para o admisntrador verificar o banco"));
         }
         this.userInstitution = userData.institution;
-        if(userData.verified==false){
-          console.log("2");
+        if(userData.verified==false && isOkay){
           isOkay = false;
           this.loader.dismiss();
           reject(new Error("Usuário não autorizado. Entre em contato com o administrador"));
         }
-        if(userData.deviceInfo!=this.deviceInfo &&  userData.deviceInfo!= "null"){
-          console.log("3");
+        if(userData.deviceInfo!=this.deviceInfo &&  userData.deviceInfo!= "null" && isOkay){
           isOkay = false;
           this.loader.dismiss();
           reject(new Error("Dispositivo não autorizado. Entre em contato com o administrador"));
@@ -129,14 +124,12 @@ UserIsVerified() {
         if(userData.deviceInfo== null){ // troca de dispositivo - cadastrar o novo
 
         }
-        console.log("4");
         if(isOkay){
         this.loader.dismiss();
         resolve();
         }
       },
         error => {
-          console.log("5");
           this.loader.dismiss();
           this.errorMsg('Não foi possível estabelecer conexão com o servidor remoto. Tente novamente');
         }
