@@ -17,13 +17,14 @@ export class IntroPage {
   private loader: any;
   private loader2: any;
   private dataBase: {};
-  private userInstitution: any;
+  private DBversion: string;
+  private userData: any;
   private deviceInfo: any = {
     uuid: "",
     model: "",
     manufacturer: ""
   };
-
+  
   constructor(public navCtrl: NavController, public navParams: NavParams,
     private loadingController: LoadingController, private checkerApi: CheckerApi,
     public alertCtrl: AlertController, public platform: Platform, private device: Device) {
@@ -90,8 +91,7 @@ export class IntroPage {
             }
           }
           if (isOkay) {
-            this.userInstitution = userData.institution;
-            this.checkerApi.saveUserInformation(userData);
+            this.userData =  userData;
             this.loader.dismiss();
             resolve();
           }
@@ -110,22 +110,26 @@ export class IntroPage {
     this.loader.present().then(() => {
       this.checkerApi.getDataBase().then(apiData => {
         this.dataBase = apiData;
-        console.log("BD loaded - Loader will be dismissed", this.dataBase)
-        this.loader.dismiss();
-        this.showVersion();
-      })
+        this.checkerApi.getBDVersion(this.userData.institution).then((version: string) => {
+          this.DBversion = version;
+          console.log("BD loaded - Loader will be dismissed", this.dataBase)
+          this.loader.dismiss();
+          this.showVersion();
+        });
+      });
     });
+
   }
 
   showVersion() {
     this.loader2 = this.loadingController.create({
       spinner: 'hide',
-      content: '<div class="Img"> <img src="' + this.getImagePath() + '" /> </div> <div class="ver">' + this.checkerApi.getBDVersion(this.userInstitution) + '</div>', //corrigir
+      content: '<div class="Img"> <img src="' + this.getImagePath() + '" /> </div> <div class="ver">' + this.DBversion + '</div>', //corrigir
       duration: 1800,
     });
     this.loader2.present().then(() => {
       // start session counter  - ************************************IMPLEMENTAR promise
-      this.navCtrl.setRoot(TabsPage, this.dataBase); //passar os dados do usário
+      this.navCtrl.setRoot(TabsPage,{"DB": this.dataBase, "UD": this.userData}); //passar os dados do usário
     });
   }
   getImagePath() {
@@ -136,7 +140,7 @@ export class IntroPage {
     var PPM = "assets/imgs/Atleticas/PPM.png";
     var RI = "assets/imgs/Atleticas/RI.png";
     var res = DCE;
-    switch (this.userInstitution) {
+    switch (this.userData.institution) {
       case "A.A.A. Adhemar F. da Silva": {
         res = RI;
         break;

@@ -18,7 +18,7 @@ export class CheckerApi {
 
     getDataBase() {
         return new Promise((resolve) => {
-            this.http.get(`${this.baseUrl}/associates.json`).subscribe((data) => {            
+            this.http.get(`${this.baseUrl}/associates.json`).subscribe((data) => {
                 resolve(data.json());
                 console.log("Fez database");
             });
@@ -49,24 +49,17 @@ export class CheckerApi {
         this.tabData.add(q);
     }
 
-    saveUserInformation(userInfo: any){
-        this.userData = userInfo;
-      }
-
-    getUserInformation(){
-        return this.userData;
-    }  
-
     getBDVersion(inst: string) { // fazer versão de dados de cada uma
-
-        this.http.get(`${this.baseUrl}/institutions.json`).subscribe((data: any) => {
-            var data2  = data.json();
-            for(var key in data2){
-                if (data2[key].Name == inst) {
-                    console.log("DBVersion: ",data2[key].DBVersion);
-                    return data2[key].DBVersion;
-                  }
-            }
-           });    
+        return new Promise((resolve) => {
+            this.http.get(`${this.baseUrl}/institutions.json`).subscribe((data: any) => {
+                var data2 = data.json();
+                for (var key in data2) {
+                    if (data2[key].Name == inst) {
+                        console.log("DBVersion: ", data2[key].DBVersion);
+                        resolve(data2[key].DBVersion);
+                    }
+                }
+            });
+        });
     }
 }

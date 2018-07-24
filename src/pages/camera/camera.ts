@@ -7,7 +7,6 @@ import { CheckerApi } from '../../shared/checker-api';
 import { Query } from '../../resources/Query';
 import { List } from '../../resources/List';
 
-
 @IonicPage()
 @Component({
   selector: 'page-camera',
@@ -21,17 +20,20 @@ export class CameraPage {
   private queryCreated: boolean = false;
   private isAss: boolean = false;
   private query: Query = null;
-  private database: any;
+  private dataBase: any;
   private name: any;
+  private userData: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
     private barcodeScanner: BarcodeScanner, private checkApi: CheckerApi) {
-    this.database = this.navParams.data;
-      //constroi a promise de sessão - timeout de 1h para envio ao firebase da querylist na api
-      this.initiateSession().then(data => {
-        //faz upload para o firebase (promise).then(
-        // fecha o app)
-      })
+    this.dataBase = this.navParams.get("DB");
+    this.userData = this.navParams.get("UD");
+    console.log("User data: ", JSON.stringify(this.userData));
+    //constroi a promise de sessão - timeout de 1h para envio ao firebase da querylist na api
+    this.initiateSession().then(data => {
+      //faz upload para o firebase (promise).then(
+      // fecha o app)
+    })
   }
 
   ionViewDidLoad() {
@@ -56,37 +58,26 @@ export class CameraPage {
 
   checkRA() {    //faz a consulta no banco e popula a query list
     if (this.query != null) {
-      console.log("Query n nula", this.database);
+      console.log("Query n nula", this.dataBase);
       var ra = this.query.getRA();
-      var keyFound = null, instFound = null;
-      l1:
-      for (var inst in this.database) {
+      // l1:
+      for (var inst in this.dataBase) {
         // console.log("Inst:", inst);
-        for (var key in this.database[inst]) {
-          //console.log("RA key: ", key);
-          if (key == ra) {
-            console.log("Achou");
-            keyFound = key;
-            instFound=inst; 
-            break l1;
-          }
-        }        
+        console.log("if: ", this.dataBase[inst][ra]);
+        if (this.dataBase[inst][ra]) {
+          var obj = this.dataBase[inst][ra];
+          this.query.setName(obj.NAME);
+          this.query.setCourse(obj.COURSE);
+          this.isAss = true;
+          this.checkApi.addTabData(this.query);
+          return true;
+        }
       }
-      
-      // verificar queryCreated 
-      if (keyFound == null) {
-        this.query.setName("Não registrado");
-        this.isAss = false;
-        this.checkApi.addTabData(this.query);
-        return false;
-      } else {
-        this.query.setName(this.database[instFound][keyFound].NAME);
-        this.query.setCourse(this.database[instFound][keyFound].COURSE);
-        this.isAss = true;
-        this.checkApi.addTabData(this.query);
-        return true;
-      }
-    }else{
+      this.query.setName("Não registrado");
+      this.isAss = false;
+      this.checkApi.addTabData(this.query);
+      return false;
+    } else {
       console.log("Query nula");
     }
   }
@@ -118,7 +109,7 @@ export class CameraPage {
             //var txt = nun.replace(/\D+/g, "");
             //console.log("txt: ", txt);
             //console.log("Number: ", parseInt(txt));
-            this.createQuery(this.organizeDate(new Date()),nun);
+            this.createQuery(this.organizeDate(new Date()), nun);
             //console.log('Buscar clicked: ', data.RA);
             this.checkRA();
             //console.log('Fechou ');
@@ -144,9 +135,9 @@ export class CameraPage {
     }
   }
 
-  initiateSession(){
+  initiateSession() {
     return new Promise((resolve) => {
-      
-  });
+
+    });
   }
 }

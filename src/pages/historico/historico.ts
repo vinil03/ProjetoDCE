@@ -13,11 +13,13 @@ import { CheckerApi } from '../../shared/checker-api';
 })
 export class HistoricoPage {
 
-  query: List<Query>;
-  hasQueryList = false;
+  private query: List<Query>;
+  private hasQueryList = false;
+  private userData: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public chkApi: CheckerApi) {
     console.log('Will construct');
+    this.userData = 
     this.query = new List();
   }
   //fazer receber queries e adiciona-las na lista
@@ -32,9 +34,8 @@ export class HistoricoPage {
     this.query = this.chkApi.getTabData();
   }
 
-  search() {
-    var userData = this.chkApi.getUserData;
-    if (userData.institution = "DCE" || userData.searchAuth == true) {
+  search() {     
+    if (this.userData.institution = "DCE" || this.userData.searchAuth == true) {
       //mostrar calendário para realizar busca.
       // Se autorizado, pode incluir outras instituiçoes por um tempo que deve ser buscado do firebase - fazer exceção para DCE
     } else {
