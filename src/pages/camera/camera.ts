@@ -56,19 +56,23 @@ export class CameraPage {
 
   checkRA() {    //faz a consulta no banco e popula a query list
     if (this.query != null) {
-
-
-      //console.log("Entrou: ");
+      console.log("Query n nula", this.database);
       var ra = this.query.getRA();
-
       var keyFound = null, instFound = null;
+      l1:
       for (var inst in this.database) {
+        // console.log("Inst:", inst);
         for (var key in this.database[inst]) {
+          //console.log("RA key: ", key);
           if (key == ra) {
+            console.log("Achou");
             keyFound = key;
+            instFound=inst; 
+            break l1;
           }
-        }
+        }        
       }
+      
       // verificar queryCreated 
       if (keyFound == null) {
         this.query.setName("Não registrado");
@@ -77,11 +81,13 @@ export class CameraPage {
         return false;
       } else {
         this.query.setName(this.database[instFound][keyFound].NAME);
-        //this.query.setCourse(this.database[instFound][keyFound].COURSE);
+        this.query.setCourse(this.database[instFound][keyFound].COURSE);
         this.isAss = true;
         this.checkApi.addTabData(this.query);
         return true;
       }
+    }else{
+      console.log("Query nula");
     }
   }
 
@@ -108,14 +114,14 @@ export class CameraPage {
           text: 'Buscar',
           handler: data => {
             var nun = data.RA;
-            console.log("nun: ", nun);
-            var txt = nun.replace(/\D+/g, "");
-            console.log("txt: ", txt);
-            console.log("Number: ", parseInt(txt));
-            //this.createQuery(this.organizeDate(new Date()),nun);
-            console.log('Buscar clicked: ', data.RA);
-            //this.checkRA();
-            console.log('Fechou ');
+            //console.log("nun: ", nun);
+            //var txt = nun.replace(/\D+/g, "");
+            //console.log("txt: ", txt);
+            //console.log("Number: ", parseInt(txt));
+            this.createQuery(this.organizeDate(new Date()),nun);
+            //console.log('Buscar clicked: ', data.RA);
+            this.checkRA();
+            //console.log('Fechou ');
           }
         }
       ]
@@ -128,7 +134,7 @@ export class CameraPage {
   }
 
   createQuery(time: string, ra: number) { //o ideal seria checar o tamanho e caracteres indevidos, se tiver, nullar
-    console.log("Query created: ", ra);
+    //console.log("Query created: ", ra);
     if (ra == null || ra < 200000000 || isNaN(ra) || ra > 205000000) {
       this.queryCreated = false;
       //this.query = null;

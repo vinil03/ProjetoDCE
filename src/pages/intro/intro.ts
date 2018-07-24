@@ -91,7 +91,6 @@ export class IntroPage {
           }
           if (isOkay) {
             this.userInstitution = userData.institution;
-            console.log("Version: ", this.checkerApi.getBDVersion(this.userInstitution));
             this.checkerApi.saveUserInformation(userData);
             this.loader.dismiss();
             resolve();

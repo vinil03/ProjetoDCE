@@ -1,8 +1,10 @@
 export class Query {
+  
     private name: string;
     private RA: number;
     private time: string;
     private typer: string;
+    private course: string;
     constructor(ra: number, time: string, name: string) {
         this.RA = ra;
         this.time = time;
@@ -15,6 +17,15 @@ export class Query {
             this.name = n;
         }
     }
+
+    public setCourse(c: string) {
+       this.course = c;
+      }
+
+    public getCourse(){
+        return this.course;
+    }  
+
     public getRA() {
         return this.RA;
     }
