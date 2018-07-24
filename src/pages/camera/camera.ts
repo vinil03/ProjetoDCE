@@ -27,6 +27,11 @@ export class CameraPage {
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
     private barcodeScanner: BarcodeScanner, private checkApi: CheckerApi) {
     this.database = this.navParams.data;
+      //constroi a promise de sessão - timeout de 1h para envio ao firebase da querylist na api
+      this.initiateSession().then(data => {
+        //faz upload para o firebase (promise).then(
+        // fecha o app)
+      })
   }
 
   ionViewDidLoad() {
@@ -52,26 +57,27 @@ export class CameraPage {
   checkRA() {    //faz a consulta no banco e popula a query list
     if (this.query != null) {
 
-      var index = null;
-      console.log("Entrou: ");
+
+      //console.log("Entrou: ");
       var ra = this.query.getRA();
 
-
-      for (var i = 0; i < this.database.length; i++) {
-        //console.log("Database i", i, "Valor: ", this.database[i].RA, "com RA: ", ra );
-        if (this.database[i].RA == ra) {
-          index = i;
-          break;
+      var keyFound = null, instFound = null;
+      for (var inst in this.database) {
+        for (var key in this.database[inst]) {
+          if (key == ra) {
+            keyFound = key;
+          }
         }
       }
       // verificar queryCreated 
-      if (index == null) {
+      if (keyFound == null) {
         this.query.setName("Não registrado");
         this.isAss = false;
         this.checkApi.addTabData(this.query);
         return false;
       } else {
-        this.query.setName(this.database[index].NAME);
+        this.query.setName(this.database[instFound][keyFound].NAME);
+        //this.query.setCourse(this.database[instFound][keyFound].COURSE);
         this.isAss = true;
         this.checkApi.addTabData(this.query);
         return true;
@@ -100,10 +106,10 @@ export class CameraPage {
         },
         {
           text: 'Buscar',
-          handler: data => {            
+          handler: data => {
             var nun = data.RA;
             console.log("nun: ", nun);
-            var txt = nun.replace(/\D+/g,"");
+            var txt = nun.replace(/\D+/g, "");
             console.log("txt: ", txt);
             console.log("Number: ", parseInt(txt));
             //this.createQuery(this.organizeDate(new Date()),nun);
@@ -130,5 +136,11 @@ export class CameraPage {
       this.query = new Query(ra, time, "someone"); // colocar nome do typer
       this.queryCreated = true;
     }
+  }
+
+  initiateSession(){
+    return new Promise((resolve) => {
+      
+  });
   }
 }

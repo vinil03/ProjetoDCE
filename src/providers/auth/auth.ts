@@ -5,9 +5,8 @@ import firebase from 'firebase';
 export class AuthProvider {
 
   constructor() {
-    console.log('Hello AuthProvider');
+    //console.log('AuthProvider Loaded');
   }
-
 
   loginUser(email: string, password: string): Promise<any> {
     return firebase.auth().signInWithEmailAndPassword(email, password);
@@ -18,26 +17,20 @@ export class AuthProvider {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        firebase.database().ref('/userProfile/'+firebase.auth().currentUser.uid).set({
+        var auth = false;
+        if(instituicao == "DCE" && email.split("@")[2]=="@dcefacamp.com"){
+          auth = true;
+        }
+        firebase.database().ref('/userProfile/' + firebase.auth().currentUser.uid).set({
           "name": nome,
           "institution": instituicao,
           "role": cargo,
           "email": email,
           "admin": false, //por padrão é uma conta comum
           "verified": false, //por padrão, não tem autorização do admin para acessar
+          "searchAuth": auth, //se consegue realizar buscas além da instituição que pertence
           "deviceInfo": deviceInfo
-      });
-        /*let newUser = firebase.database().ref('/userProfile').push();
-        newUser.set
-          ({
-            "name": nome,
-            "institution": instituicao,
-            "role": cargo,
-            "email": email,
-            "admin": false, //por padrão é uma conta comum
-            "verified": false, //por padrão, não tem autorização do admin para acessar
-            "deviceInfo": deviceInfo
-          });*/
+        });
       });
   }
 
@@ -49,4 +42,4 @@ export class AuthProvider {
   logoutUser(): Promise<void> {
     return firebase.auth().signOut();
   }
- }
+}

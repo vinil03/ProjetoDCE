@@ -15,9 +15,11 @@
         <ion-item>
           <h2>{{dado.getName()}}</h2>
           <h3>{{dado.getRA()}}</h3>
-          <!-- <p>{{query.getItem(0).getCourse()}}</p> -->
         </ion-item>
       </div>
     </ion-list>
   </div>
+  <button ion-button icon-end>     
+    <ion-icon (click)= "search()" name="cloud-circle"></ion-icon>
+  </button>
 </ion-content>

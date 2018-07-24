@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthProvider } from '../../providers/auth/auth';
 import { EmailValidator } from '../../validators/email';
 import { IntroPage } from '../intro/intro';
+import { Device } from '@ionic-native/device';
 
 @IonicPage({
   name: 'signup'
@@ -18,10 +19,16 @@ export class SignupPage {
   private  messageEmail: string;
   private  messagePassword: string;
   private  messageName: string;
-  //private deviceInfo: {uuid: "", model: "", manufacturer: ""};
-  private deviceInfo: "temp";
+  private deviceInfo: any ={
+    uuid: "",
+    model: "",
+    manufacturer: ""
+  };
 
-  constructor(public navCtrl: NavController, public authProvider: AuthProvider, public formBuilder: FormBuilder, public loadingCtrl: LoadingController, public alertCtrl: AlertController) {
+  constructor(public navCtrl: NavController, public authProvider: AuthProvider,
+    public formBuilder: FormBuilder, public loadingCtrl: LoadingController,
+    public alertCtrl: AlertController, private device: Device) {
+
       this.signupForm = formBuilder.group({
         email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
         password: ['',Validators.compose([Validators.minLength(5), Validators.required])],
@@ -29,12 +36,13 @@ export class SignupPage {
         instituicao: ['',Validators.compose([Validators.required])],
         cargo: ['',Validators.compose([Validators.minLength(6), Validators.required])]
       });
+
       this.messageEmail = "";
       this.messagePassword = "";
       this.messageName = "";
-      //this.deviceInfo= {string:"s","s","s"};
-      //this.deviceInfo.uuid = "testeuuid";
-      //console.log("UID: ", this.deviceInfo.uuid)
+      this.deviceInfo.uuid=this.device.uuid;
+      this.deviceInfo.model=this.device.model;
+      this.deviceInfo.manufacturer=this.device.manufacturer;
     }
 
     signupUser(){
@@ -64,7 +72,6 @@ export class SignupPage {
 
         console.log(this.signupForm.value);
       } else {
-        this.deviceInfo = "temp"; //ARRUMAR
         this.authProvider.signupUser(this.signupForm.value.email, this.signupForm.value.password, this.signupForm.value.name, this.signupForm.value.cargo, this.signupForm.value.instituicao, this.deviceInfo).then(() => {
           this.loading.dismiss().then( () => {
             let alert = this.alertCtrl.create({
@@ -104,6 +111,6 @@ export class SignupPage {
     }
 
     sendNotification(){
-      
+      //IMPLEMENTAR -  Ao ser casdastrado um novo usuário, os admins devem receber uma notificação
     }
   }
