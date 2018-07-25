@@ -3,12 +3,10 @@ export class Query {
     private name: string;
     private RA: number;
     private time: string;
-    private typer: string;
     private course: string;
-    constructor(ra: number, time: string, name: string) {
+    constructor(ra: number, time: string) {
         this.RA = ra;
         this.time = time;
-        this.typer = name;
     }
     public setName(n: string) {
         if (n.length > 30) {
@@ -34,8 +32,5 @@ export class Query {
     }
     public getTime() {
         return this.time;
-    }
-    public getTyper() {
-        return this.typer;
     }
 }

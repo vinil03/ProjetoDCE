@@ -8,9 +8,11 @@ import firebase from '../../node_modules/firebase';
 @Injectable()
 
 export class CheckerApi {
+
     private baseUrl = 'https://dcechecker.firebaseio.com';
     private tabData: List<Query>;
-    private userData: any;
+    private sessionID: any;
+    private instData: any;
 
     constructor(private http: Http) {
         this.tabData = new List();
@@ -49,17 +51,58 @@ export class CheckerApi {
         this.tabData.add(q);
     }
 
-    getBDVersion(inst: string) { // fazer versão de dados de cada uma
+    getBDVersion(inst: string) {
         return new Promise((resolve) => {
             this.http.get(`${this.baseUrl}/institutions.json`).subscribe((data: any) => {
-                var data2 = data.json();
-                for (var key in data2) {
-                    if (data2[key].Name == inst) {
-                        console.log("DBVersion: ", data2[key].DBVersion);
-                        resolve(data2[key].DBVersion);
+                this.instData = data.json();
+                for (let key in this.instData) {
+                    if (this.instData[key].Name == inst) {
+                        resolve(this.instData[key].DBVersion);
                     }
                 }
             });
+        });
+    }
+
+    getInstitutionKey(inst: string): string{
+        for (let i; i < this.instData.lengh; i++) {
+            if (this.instData[i].Name == inst) {
+                return i;                
+            }
+        }
+    }
+
+    setSessionID(id: any){
+        this.sessionID = id;
+    }
+
+    uploadSession(userInfo: any) { //GET SESSION ID
+        let instKey;
+        let sessionData = "";
+        console.log("Session ID: ", this.sessionID);
+        console.log("QueryList: ", this.tabData);
+        console.log("QueryListSize: ", this.tabData.size());
+
+        for(let i; i < this.tabData.size(); i++){
+            console.log("Entrou no loop");
+            let q = this.tabData.getItem(i);
+            sessionData = '"'+ q.getRA() + '","' + q.getTime() + '"' + sessionData;
+            console.log("Session data: ", sessionData);
+            if(i<this.tabData.size()){ //faz qd está na ultima linha?
+                sessionData = sessionData + ",";
+            }
+        }
+        console.log("*************SessionData to be uploaded: ");
+        console.log(sessionData);
+        console.log("JSON: ", JSON.stringify(sessionData));          
+        return new Promise((resolve, reject) => {
+            resolve();
+            firebase.database().ref('/sessions/' + this.getInstitutionKey(userInfo.institution) + '/' + this.sessionID).set({
+
+            }).then(() => {
+                resolve();
+            },
+                error => reject(error));           
         });
     }
 }

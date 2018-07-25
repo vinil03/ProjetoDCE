@@ -128,8 +128,7 @@ export class IntroPage {
       duration: 1800,
     });
     this.loader2.present().then(() => {
-      // start session counter  - ************************************IMPLEMENTAR promise
-      this.navCtrl.setRoot(TabsPage,{"DB": this.dataBase, "UD": this.userData}); //passar os dados do usário
+      this.navCtrl.setRoot(TabsPage,{"DB": this.dataBase, "UD": this.userData});
     });
   }
   getImagePath() {

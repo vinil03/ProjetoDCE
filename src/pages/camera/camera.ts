@@ -28,7 +28,8 @@ export class CameraPage {
     private barcodeScanner: BarcodeScanner, private checkApi: CheckerApi) {
     this.dataBase = this.navParams.get("DB");
     this.userData = this.navParams.get("UD");
-    console.log("User data: ", JSON.stringify(this.userData));
+    //console.log("User data: ", JSON.stringify(this.userData));
+    
     //constroi a promise de sessão - timeout de 1h para envio ao firebase da querylist na api
     this.initiateSession().then(data => {
       //faz upload para o firebase (promise).then(
@@ -37,6 +38,8 @@ export class CameraPage {
   }
 
   ionViewDidLoad() {
+    let ID = new Date();
+    this.checkApi.setSessionID(ID.getDate()+"-"+(ID.getMonth()+1)+"-"+ID.getFullYear()+"-"+ID.getHours()+"-"+ID.getMinutes()+"-"+ID.getSeconds()+"-"+ID.getMilliseconds());
     console.log('ionViewDidLoad CameraPage');
   }
 
@@ -53,17 +56,14 @@ export class CameraPage {
     }).catch(err => {
       console.log('Erro de leitura do barcode', err);
     });
-
   }
 
   checkRA() {    //faz a consulta no banco e popula a query list
     if (this.query != null) {
-      console.log("Query n nula", this.dataBase);
+      //console.log("Query n nula", this.dataBase);
       var ra = this.query.getRA();
-      // l1:
       for (var inst in this.dataBase) {
         // console.log("Inst:", inst);
-        console.log("if: ", this.dataBase[inst][ra]);
         if (this.dataBase[inst][ra]) {
           var obj = this.dataBase[inst][ra];
           this.query.setName(obj.NAME);
@@ -73,7 +73,7 @@ export class CameraPage {
           return true;
         }
       }
-      this.query.setName("Não registrado");
+      this.query.setName("Nome não registrado");
       this.isAss = false;
       this.checkApi.addTabData(this.query);
       return false;
@@ -121,7 +121,7 @@ export class CameraPage {
   }
 
   organizeDate(d: Date) { //CORRIGIR O MÊS!!!!
-    return d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds() + "|" + d.getDate() + "/" + d.getMonth() + "/" + d.getFullYear();
+    return d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
   }
 
   createQuery(time: string, ra: number) { //o ideal seria checar o tamanho e caracteres indevidos, se tiver, nullar
@@ -130,7 +130,7 @@ export class CameraPage {
       this.queryCreated = false;
       //this.query = null;
     } else {
-      this.query = new Query(ra, time, "someone"); // colocar nome do typer
+      this.query = new Query(ra, time); // colocar nome do typer
       this.queryCreated = true;
     }
   }
