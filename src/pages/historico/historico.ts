@@ -18,17 +18,15 @@ export class HistoricoPage {
   private loader: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private checkerApi: CheckerApi, private loadingController: LoadingController, private toastCtrl: ToastController, private alertController: AlertController) {
-    this.userData = this.navParams.get("UD");
-    console.log("Nav params in hist: ", this.navParams.data);
-    console.log("User data in hist: ", this.userData);
+    this.userData = this.checkerApi.getUserData();
+    //console.log("Nav params in hist: ", this.navParams.data);
+    //console.log("User data in hist: ", this.userData);
     this.query = new List();
   }
   //fazer receber queries e adiciona-las na lista - multilinelist
   ionViewDidLoad() {
-    console.log('Query items[0]: ', this.query.getItem(0), "Query size: ", this.query.size());
-    
-    
-   //s if(this.query.getItem(0)){ 
+    //console.log('Query items[0]: ', this.query.getItem(0), "Query size: ", this.query.size());
+    //s if(this.query.getItem(0)){ 
     this.hasQueryList = true; //só faz se tiver pelo menos um item 
    // }
   }
@@ -48,15 +46,17 @@ export class HistoricoPage {
       closeButtonText: 'Ok'
     });      
     this.loader.present().then(() => {
-      this.checkerApi.uploadSession(this.userData).then(() => { //Lembrar da session ID 
+      console.log("User data: ", this.userData);
+      this.checkerApi.uploadSession(this.userData).then(() => {
         this.loader.dismiss();
+        // falta limpar a lista e session id
         toast.present();
       },
         error => {
           this.loader.dismiss();
           let alert = this.alertController.create({
             title: 'Erro',
-            subTitle: 'Não foi possível salvar. Tente novamente mais tarde \n' + error,
+            subTitle: 'Não foi possível salvar. Tente novamente mais tarde \n\n' + error,
             buttons: [{
               text: 'OK'
             }]

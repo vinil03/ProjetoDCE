@@ -8,17 +8,18 @@ import firebase from '../../node_modules/firebase';
 @Injectable()
 
 export class CheckerApi {
-
     private baseUrl = 'https://dcechecker.firebaseio.com';
     private tabData: List<Query>;
     private sessionID: any;
     private instData: any;
+    private userData: any;
+    private dataBase: any;
 
     constructor(private http: Http) {
         this.tabData = new List();
     }
 
-    getDataBase() {
+    loadDataBase() {
         return new Promise((resolve) => {
             this.http.get(`${this.baseUrl}/associates.json`).subscribe((data) => {
                 resolve(data.json());
@@ -27,7 +28,7 @@ export class CheckerApi {
         });
     }
 
-    getUserData(uid: string) {
+    loadUserData(uid: string) {
         return new Promise((resolve, reject) => {
             //console.log("UID: ", uid );
             this.http.get(`${this.baseUrl}/userProfile/` + uid + `/.json`).timeout(20000).subscribe((data) => {
@@ -37,9 +38,7 @@ export class CheckerApi {
     }
 
     updateDevice(uid: string, deviceInfo: any) {
-        firebase.database().ref('/userProfile/' + uid + '/deviceInfo/').set({
-            deviceInfo
-        });
+        firebase.database().ref('/userProfile/' + uid + '/deviceInfo/').set(deviceInfo);
         console.log("Device updated!")
     }
 
@@ -64,45 +63,108 @@ export class CheckerApi {
         });
     }
 
-    getInstitutionKey(inst: string): string{
-        for (let i; i < this.instData.lengh; i++) {
-            if (this.instData[i].Name == inst) {
-                return i;                
+    getInstitutionKey(inst: string): string {  //deveria trocar para os nomes poderem ser trocados no banco
+        let res = "";
+        switch (this.userData.institution) {
+            case "A.A.A. Adhemar F. da Silva": {
+                res = "RI-ECORI";
+                break;
+            }
+            case "A.A.A. PPM": {
+                res = "PPM";
+                break;
+            }
+            case "A.A.A. XX de Março": {
+                res = "ENG" ;
+                break;
+            }
+            case "A.A.A. XXVIII de Maio": {
+                res = "DIR";
+                break;
+            }
+            case "A.A.A. XIX de Abril": {
+                res = "ADM-ECO";
+                break;
+            }
+            case "DCE Celso Furtado": {
+                res = "DCE";
+                break;
             }
         }
+        return res;
+
+
+
+        /* console.log("Inst received:", inst);
+         console.log("InstData: ", this.instData);
+ 
+         for (let i=0; i < this.instData.lengh; i++) {
+             console.log("Inst Name:",this.instData[i].Name, "Instname = inst ", this.instData[i].Name == inst);
+             if (this.instData[i].Name == inst) {
+                 return i;                
+             }
+         } */
     }
 
-    setSessionID(id: any){
+    setSessionID(id: any) {
         this.sessionID = id;
     }
 
-    uploadSession(userInfo: any) { //GET SESSION ID
-        let instKey;
+    uploadSession(userInfo: any) {
         let sessionData = "";
-        console.log("Session ID: ", this.sessionID);
         console.log("QueryList: ", this.tabData);
-        console.log("QueryListSize: ", this.tabData.size());
+        //console.log("QueryListSize: ", this.tabData.size());
+        let multiple_queries: Array<Query>;
+        multiple_queries = [];
 
-        for(let i; i < this.tabData.size(); i++){
+        for (let i = 0; i < this.tabData.size(); i++) {
             console.log("Entrou no loop");
             let q = this.tabData.getItem(i);
-            sessionData = '"'+ q.getRA() + '","' + q.getTime() + '"' + sessionData;
-            console.log("Session data: ", sessionData);
-            if(i<this.tabData.size()){ //faz qd está na ultima linha?
-                sessionData = sessionData + ",";
+            if(this.tabData.isUnique(q)){
+               
+            }else{
+                multiple_queries.push(q);
             }
         }
+        for(let i = 0; i < multiple_queries.length; i++){
+            let q = multiple_queries.shift();
+            //sessionData = '"' + q.getRA() + '":"' + q.getTime() + '",' + sessionData;
+            
+        }
+
+
+
+        sessionData = sessionData.substr(0, sessionData.lastIndexOf(",") - 1);
         console.log("*************SessionData to be uploaded: ");
         console.log(sessionData);
-        console.log("JSON: ", JSON.stringify(sessionData));          
         return new Promise((resolve, reject) => {
-            resolve();
-            firebase.database().ref('/sessions/' + this.getInstitutionKey(userInfo.institution) + '/' + this.sessionID).set({
-
-            }).then(() => {
+            firebase.database().ref('/sessions/' + this.getInstitutionKey(userInfo.institution) + '/' + this.sessionID).set(
+                sessionData
+            ).then(() => {                
                 resolve();
             },
-                error => reject(error));           
+                error => reject(error)); // fazer timeout
         });
     }
+
+    saveDataBase(db: any) {
+        this.dataBase = db;
+    }
+
+    saveUserData(ud: any) {
+        this.userData = ud;
+    }
+
+    getDataBase() {
+        return this.dataBase;
+    }
+
+    getUserData() {
+        return this.userData;
+    }
+
+    private getAnother(ra: number, list: Array<Query>){
+        
+    }
+
 }

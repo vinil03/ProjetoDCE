@@ -11,10 +11,8 @@ export class TabsPage {
   tab1Root = CameraPage;
   tab2Root = HistoricoPage;
   tab1Params: any;
-  tab2Params: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
     this.tab1Params = this.navParams.data;
-    this.tab2Params = this.navParams.data;
   }
 }

@@ -33,4 +33,5 @@ export class Query {
     public getTime() {
         return this.time;
     }
+
 }

@@ -66,10 +66,10 @@ export class IntroPage {
       this.loader = this.loadingController.create({ content: "Verificando credencial..." });
       this.loader.present().then(() => {
         var uid = firebase.auth().currentUser.uid
-        this.checkerApi.getUserData(uid).then((userData: any) => {
+        this.checkerApi.loadUserData(uid).then((userData: any) => {
           var isOkay = true;
-          console.log("User Information loaded: ", userData);
-          console.log("User Information is null? ", userData == null);
+          //console.log("User Information loaded: ", userData);
+          //console.log("User Information is null? ", userData == null);
           //console.log("AUTHORIZED?", !userData.verified == false);
           if (userData == null && isOkay) {
             isOkay = false;
@@ -80,7 +80,7 @@ export class IntroPage {
               isOkay = false;
               this.loader.dismiss();
               reject(new Error("Usuário não autorizado. Entre em contato com o administrador"));
-            }
+            }//Descomentar para testar celular
             //if (userData.deviceInfo != this.deviceInfo && userData.deviceInfo != "newDevice" && isOkay) {
             //  isOkay = false;
             //  this.loader.dismiss();
@@ -108,7 +108,7 @@ export class IntroPage {
   loadData() {
     this.loader = this.loadingController.create({ content: "Carregando..." });
     this.loader.present().then(() => {
-      this.checkerApi.getDataBase().then(apiData => {
+      this.checkerApi.loadDataBase().then(apiData => {
         this.dataBase = apiData;
         this.checkerApi.getBDVersion(this.userData.institution).then((version: string) => {
           this.DBversion = version;
@@ -128,7 +128,9 @@ export class IntroPage {
       duration: 1800,
     });
     this.loader2.present().then(() => {
-      this.navCtrl.setRoot(TabsPage,{"DB": this.dataBase, "UD": this.userData});
+      this.checkerApi.saveDataBase(this.dataBase);
+      this.checkerApi.saveUserData(this.userData);
+      this.navCtrl.setRoot(TabsPage);
     });
   }
   getImagePath() {

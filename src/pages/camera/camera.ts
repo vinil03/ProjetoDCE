@@ -26,10 +26,11 @@ export class CameraPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
     private barcodeScanner: BarcodeScanner, private checkApi: CheckerApi) {
-    this.dataBase = this.navParams.get("DB");
-    this.userData = this.navParams.get("UD");
-    //console.log("User data: ", JSON.stringify(this.userData));
-    
+    this.dataBase = this.checkApi.getDataBase();
+    this.userData = this.checkApi.getUserData();
+    let ID = new Date();
+    this.checkApi.setSessionID(ID.getDate() + ":" + (ID.getMonth() + 1) + ":" + ID.getFullYear() + "-" + ID.getHours() + ":" + ID.getMinutes() + ":" + ID.getSeconds() + ":" + ID.getMilliseconds());
+    console.log("Institution key from method: ",  this.checkApi.getInstitutionKey(this.userData.institution));
     //constroi a promise de sessão - timeout de 1h para envio ao firebase da querylist na api
     this.initiateSession().then(data => {
       //faz upload para o firebase (promise).then(
@@ -38,8 +39,6 @@ export class CameraPage {
   }
 
   ionViewDidLoad() {
-    let ID = new Date();
-    this.checkApi.setSessionID(ID.getDate()+"-"+(ID.getMonth()+1)+"-"+ID.getFullYear()+"-"+ID.getHours()+"-"+ID.getMinutes()+"-"+ID.getSeconds()+"-"+ID.getMilliseconds());
     console.log('ionViewDidLoad CameraPage');
   }
 
@@ -120,8 +119,25 @@ export class CameraPage {
     prompt.present();
   }
 
-  organizeDate(d: Date) { //CORRIGIR O MÊS!!!!
-    return d.getHours() + ":" + d.getMinutes() + ":" + d.getSeconds();
+  organizeDate(d: Date) {
+    let sec = d.getSeconds(), min = d.getMinutes(), h = d.getHours() ;
+    let h2, min2, sec2;
+    if (h < 10) {
+      h2 = "0" + h;
+    } else {
+      h2 = h;
+    }
+    if (min < 10) {
+      min2 = "0" + min;
+    } else {
+      min2 = min;
+    }
+    if (sec < 10) {
+      sec2 = "0" + sec;
+    } else {
+      sec2 = sec;
+    }
+    return h + ":" + min2 + ":" + sec2;
   }
 
   createQuery(time: string, ra: number) { //o ideal seria checar o tamanho e caracteres indevidos, se tiver, nullar
