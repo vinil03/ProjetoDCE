@@ -21,18 +21,20 @@
        <div class="Login-button">
           <button ion-button (click)="verifyUser()" [disabled]="!loginForm.valid">Login </button>
       </div>
-      <div class="Sem-login">
+      <div class="Sem-login-Senha">
         <button ion-button outline (click)= "createLogin()"> Não tenho Login </button>
-      </div>
-      <div class="Sem-senha"> <!-- Corrigir formato | Fazer menor?-->
         <button ion-button outline (click)= "resetPassword()"> Esqueci a senha </button>
       </div>
-      <div class="Facebook-login"> <!-- Corrigir formato -->
-        <button ion-button (click)= "verifyUser_FB()"> Login com Facebook </button>
+
+      <div class="Facebook-login" id="FG-log">
+
+        <ion-icon (click)= "verifyUser_FB()" name="logo-facebook"  id="Facebook"></ion-icon>
+        <!-- <button ion-button (click)= "verifyUser_FB()"> Login com Facebook </button> -->
+
+        <ion-icon (click)= "verifyUser_G()" name="logo-google"  id="Google"></ion-icon>
+        <!-- <button ion-button (click)= "verifyUser_G()"> Login com Google </button> -->
       </div>
-      <div class="Google-login"> <!-- Corrigir formato -->
-        <button ion-button (click)= "verifyUser_G()"> Login com Google </button>
-      </div>
+
   </ion-list>
 </form>
 </ion-content>

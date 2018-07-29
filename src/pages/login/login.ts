@@ -64,10 +64,11 @@ export class LoginPage {
   }
 
   verifyUser_FB() { //substistuir por verificar login
-
+    console.log("Deu certo Login por Facebook!!!");
   }
 
   verifyUser_G() {
+    console.log("Deu certo Login por Google!!!");
     /*this.signInWithGoogle()
       .then(
         () => this.navCtrl.setRoot(IntroPage),

@@ -3,6 +3,7 @@ import { IonicPage, NavController, AlertController } from 'ionic-angular';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { AuthProvider } from '../../providers/auth/auth';
 import { EmailValidator } from '../../validators/email';
+import { LoginPage } from '../login/login';
 
 @IonicPage({
   name: 'reset-password'
@@ -19,6 +20,10 @@ export class ResetPasswordPage {
         email: ['',
         Validators.compose([Validators.required, EmailValidator.isValid])],
       });
+  }
+
+  GoBack(){
+    this.navCtrl.pop();
   }
 
   resetPassword(){
