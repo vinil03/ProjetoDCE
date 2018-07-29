@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, Loading, LoadingController, AlertController } from 'ionic-angular';
+import { IonicPage, NavController, Loading, LoadingController, AlertController, ToastController } from 'ionic-angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthProvider } from '../../providers/auth/auth';
 import { EmailValidator } from '../../validators/email';
@@ -16,101 +16,141 @@ import { Device } from '@ionic-native/device';
 export class SignupPage {
   public signupForm: FormGroup;
   public loading: Loading;
-  private  messageEmail: string;
-  private  messagePassword: string;
-  private  messageName: string;
-  private deviceInfo: any ={
+  private hasError = true;
+  private errorMsg = "Digite os campos!";
+  private deviceInfo: any = {
     uuid: "",
     model: "",
     manufacturer: ""
   };
 
+
   constructor(public navCtrl: NavController, public authProvider: AuthProvider,
     public formBuilder: FormBuilder, public loadingCtrl: LoadingController,
-    public alertCtrl: AlertController, private device: Device) {
+    public alertCtrl: AlertController, private device: Device, private toastCtrl: ToastController) {
 
-      this.signupForm = formBuilder.group({
-        email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
-        password: ['',Validators.compose([Validators.minLength(5), Validators.required])],
-        name: ['',Validators.compose([Validators.minLength(6), Validators.required])],
-        instituicao: ['',Validators.compose([Validators.required])],
-        cargo: ['',Validators.compose([Validators.minLength(6), Validators.required])]
+    this.signupForm = formBuilder.group({
+      email: ['', Validators.compose([Validators.required, EmailValidator.isValid])],
+      password: ['', Validators.compose([Validators.minLength(6), Validators.required])],
+      name: ['', Validators.compose([Validators.minLength(6), Validators.required])],
+      instituicao: ['', Validators.compose([Validators.required])],
+      cargo: ['', Validators.compose([Validators.minLength(6), Validators.required])]
+    });
+    this.onChanges();
+    this.deviceInfo.uuid = this.device.uuid;
+    this.deviceInfo.model = this.device.model;
+    this.deviceInfo.manufacturer = this.device.manufacturer;
+  }
+
+  signupUser() {
+    console.log("Form is valid?", this.signupForm.valid)
+    if (!this.signupForm.valid || this.hasError) {
+      //this.errorMsg = "erro";
+      const toast = this.toastCtrl.create({
+        message: this.errorMsg,
+        duration: 1000,
+        showCloseButton: true,
+        closeButtonText: 'Ok'
       });
 
-      this.messageEmail = "";
-      this.messagePassword = "";
-      this.messageName = "";
-      this.deviceInfo.uuid=this.device.uuid;
-      this.deviceInfo.model=this.device.model;
-      this.deviceInfo.manufacturer=this.device.manufacturer;
-    }
-
-    signupUser(){
-      if (!this.signupForm.valid){
-        let { emailV, passwordV, nameV } = this.signupForm.controls;
-        if (!emailV.valid) {  
-          //this.errorEmail = true;
-          this.messageEmail = "Email inválido";
-        } else {
-          this.messageEmail = "";
-        }
-  
-        if (!passwordV.valid) {
-          //this.errorPassword = true;
-          this.messagePassword ="A senha precisa ter no mínimo 6 caracteres"
-        } else {
-          this.messagePassword = "";
-        }
-
-        if (!nameV.valid) {
-          //this.errorPassword = true;
-          this.messageName ="Digite seu sobrenome"
-        } else {
-          this.messageName = "";
-        }
-
-
-        console.log(this.signupForm.value);
-      } else {
-        this.authProvider.signupUser(this.signupForm.value.email, this.signupForm.value.password, this.signupForm.value.name, this.signupForm.value.cargo, this.signupForm.value.instituicao, this.deviceInfo).then(() => {
-          this.loading.dismiss().then( () => {
-            let alert = this.alertCtrl.create({
-              message: "Conta criada com sucesso!",
-              buttons: [
-                {
-                  text: "Ok",
-                  handler: data =>{
-                    this.navCtrl.setRoot(IntroPage);
-                  }
-                }
-              ]
-              
-            });
-            alert.present();            
-          });
-        }, (error) => {
-          this.loading.dismiss().then( () => {
-            let alert = this.alertCtrl.create({
-              message: error.message,
-              buttons: [
-                {
-                  text: "Ok",
-                  role: 'Cancel'
-                }
-              ]
-            });
-            alert.present();
-          });
-        });
-        this.loading = this.loadingCtrl.create();
-        this.loading.present();
-        console.log("Form",this.signupForm.value);
-        console.log();
-      
-      }
-    }
-
-    sendNotification(){
-      //IMPLEMENTAR -  Ao ser casdastrado um novo usuário, os admins devem receber uma notificação
+      toast.present();
+      console.log(this.signupForm.value);
+    } else {
+      console.log("No errors");
+      /* this.authProvider.signupUser(this.signupForm.value.email, this.signupForm.value.password, this.signupForm.value.name, this.signupForm.value.cargo, this.signupForm.value.instituicao, this.deviceInfo).then(() => {
+         this.loading.dismiss().then( () => {
+           let alert = this.alertCtrl.create({
+             message: "Conta criada com sucesso!",
+             buttons: [
+               {
+                 text: "Ok",
+                 handler: data =>{
+                   this.navCtrl.setRoot(IntroPage);
+                 }
+               }
+             ]
+             
+           });
+           alert.present();            
+         });
+       }, (error) => {
+         this.loading.dismiss().then( () => {
+           let alert = this.alertCtrl.create({
+             message: error.message,
+             buttons: [
+               {
+                 text: "Ok",
+                 role: 'Cancel'
+               }
+             ]
+           });
+           alert.present();
+         });
+       });
+       this.loading = this.loadingCtrl.create();
+       this.loading.present();*/
     }
   }
+
+  private onChanges(): void {
+    console.log("On change");
+    this.signupForm.valueChanges.subscribe(val => {
+      let control = this.signupForm.controls;
+      let emailMsg, nameMsg, passwordMsg, instMsg, cargoMsg;
+      if (!control["cargo"].valid) {
+        instMsg = "Preecha a instituição!";
+        this.hasError = true;
+      } else {
+        this.hasError = false;
+        instMsg = "";
+      }
+      if (!control["cargo"].valid) {
+        cargoMsg = "Preecha o cargo!";
+        this.hasError = true;
+      } else {
+        this.hasError = false;
+        cargoMsg = "";
+      }
+      if (!control["email"].valid) {
+        emailMsg = "Email inválido";
+        this.hasError = true;
+      } else {
+        this.hasError = false;
+        emailMsg = "";
+      }
+      if (control["email"].value.split("@")[1] != "dcefacamp.com" && control["instituicao"].value == "DCE Celso Furtado") {
+        emailMsg = "Digite o seu email DCE";
+        this.hasError = true;
+      }
+      if (!control["password"].valid) {
+        passwordMsg = "A senha precisa ter no mínimo 6 caracteres";
+        this.hasError = true;
+      } else {
+        this.hasError = false;
+        passwordMsg = "";
+      }
+      if (!control["name"].valid) {
+        nameMsg = "Digite seu sobrenome";
+        this.hasError = true;
+      } else {
+        this.hasError = false;
+        nameMsg = "";
+      }
+      this.errorMsg = nameMsg
+
+      if(instMsg!=""){
+        this.errorMsg += "\n" + instMsg ;
+      }
+      if(cargoMsg!=""){
+        this.errorMsg += "\n" + cargoMsg ;
+      }
+      if(emailMsg!=""){
+        this.errorMsg += "\n" + emailMsg ;
+      }
+      if(passwordMsg!=""){
+        this.errorMsg += "\n" + passwordMsg ;
+      }
+      console.log("Form is valid? ", this.signupForm.valid, "hasErrors?", this.hasError);
+    });
+  }
+}

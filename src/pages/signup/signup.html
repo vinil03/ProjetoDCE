@@ -31,13 +31,12 @@
     </ion-item>
 
     <ion-item>
-      <ion-label stacked>Password</ion-label>
+      <ion-label stacked>Senha</ion-label>
       <ion-input formControlName="password" type="password" [class.invalid]="!signupForm.controls.password.valid && blur"></ion-input>
       <div class = "errorMessage">{{messagePassword}}</div>
-    </ion-item>
-
-    <button ion-button block type="submit" [disabled]="!signupForm.valid">
-      Criar uma conta
-    </button>
+    </ion-item>    
   </form>
+  <button ion-button block (click)= "signupUser()" type="submit">
+    Criar uma conta
+  </button>
 </ion-content>

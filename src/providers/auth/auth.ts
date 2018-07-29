@@ -29,6 +29,7 @@ export class AuthProvider {
           "admin": false, //por padrão é uma conta comum
           "verified": false, //por padrão, não tem autorização do admin para acessar
           "searchAuth": auth, //se consegue realizar buscas além da instituição que pertence
+          "verifiedBy": "",
           "deviceInfo": deviceInfo
         });
       });

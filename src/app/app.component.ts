@@ -32,7 +32,7 @@ export class MyApp {
 
     const unsubscribe = firebase.auth().onAuthStateChanged(user => {
       if (!user) {
-        this.rootPage = LoginPage; // está certo?
+        this.rootPage = LoginPage;
         unsubscribe();
       } else {
         this.rootPage = IntroPage;
