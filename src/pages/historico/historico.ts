@@ -47,7 +47,7 @@ export class HistoricoPage {
     });      
     this.loader.present().then(() => {
       console.log("User data: ", this.userData);
-      this.checkerApi.uploadSession(this.userData).then(() => {
+      this.checkerApi.uploadSession(this.userData, "ID de compartilhamento").then(() => {
         this.loader.dismiss();
         // falta limpar a lista e session id
         toast.present();

@@ -68,6 +68,7 @@ export class IntroPage {
         var uid = firebase.auth().currentUser.uid
         this.checkerApi.loadUserData(uid).then((userData: any) => {
           var isOkay = true;
+          //console.log("email:", firebase.auth().currentUser.emailVerified);
           //console.log("User Information loaded: ", userData);
           //console.log("User Information is null? ", userData == null);
           //console.log("AUTHORIZED?", !userData.verified == false);
@@ -76,6 +77,11 @@ export class IntroPage {
             this.loader.dismiss();
             reject(new Error("Usuário com erro nos dados. Fale para o administrador verificar o banco"));
           } else {
+            if (!firebase.auth().currentUser.emailVerified && isOkay) {
+              isOkay = false;
+              this.loader.dismiss();
+              reject(new Error("Verifique o seu email para ativar a conta"));
+            }
             if (userData.verified == false && isOkay) {
               isOkay = false;
               this.loader.dismiss();

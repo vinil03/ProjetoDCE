@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
+import { resolveDefinition } from '../../../node_modules/@angular/core/src/view/util';
 
 @Injectable()
 export class AuthProvider {
@@ -18,7 +19,7 @@ export class AuthProvider {
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
         var auth = false;
-        if(instituicao == "DCE" && email.split("@")[2]=="@dcefacamp.com"){
+        if(instituicao == "DCE Celso Furtado" && email.split("@")[1]=="dcefacamp.com"){
           auth = true;
         }
         firebase.database().ref('/userProfile/' + firebase.auth().currentUser.uid).set({
@@ -42,5 +43,14 @@ export class AuthProvider {
 
   logoutUser(): Promise<void> {
     return firebase.auth().signOut();
+  }
+
+  sendConfirmationEmail(){
+    firebase.auth().currentUser.sendEmailVerification().then(()=> {
+      console.log("email sent");
+      return;
+     }, error => {
+      console.log("email not sent", error);
+     });
   }
 }
