@@ -4,6 +4,7 @@ import 'rxjs/add/operator/timeout';
 import { List } from '../resources/List';
 import { Query } from '../resources/Query';
 import firebase from '../../node_modules/firebase';
+import { query } from '../../node_modules/@angular/core/src/animation/dsl';
 
 @Injectable()
 
@@ -75,7 +76,7 @@ export class CheckerApi {
                 break;
             }
             case "A.A.A. XX de Março": {
-                res = "ENG" ;
+                res = "ENG";
                 break;
             }
             case "A.A.A. XXVIII de Maio": {
@@ -110,8 +111,9 @@ export class CheckerApi {
         this.sessionID = id;
     }
 
-    uploadSession(userInfo: any) {
-        let sessionData = "";
+    uploadSession(userInfo: any, shareID: string) {
+        let sessionData: Array<string>;
+        sessionData = [];
         console.log("QueryList: ", this.tabData);
         //console.log("QueryListSize: ", this.tabData.size());
         let multiple_queries: Array<Query>;
@@ -120,28 +122,45 @@ export class CheckerApi {
         for (let i = 0; i < this.tabData.size(); i++) {
             console.log("Entrou no loop");
             let q = this.tabData.getItem(i);
-            if(this.tabData.isUnique(q)){
-               
-            }else{
+            if (this.tabData.isUnique(q)) {
+                sessionData.push('"' + q.getRA() + '":"' + q.getTime() + '"');
+            } else {
                 multiple_queries.push(q);
             }
         }
-        for(let i = 0; i < multiple_queries.length; i++){
+        for (let i = 0; i < multiple_queries.length; i++) {
+            let RA_queries: Array<Query>;
+            RA_queries = [];
             let q = multiple_queries.shift();
-            //sessionData = '"' + q.getRA() + '":"' + q.getTime() + '",' + sessionData;
-            
+            if (q.getRA() != 0) {
+                RA_queries.push(q);
+            }
+            for (let l = 0; l < multiple_queries.length; l++) { //l= i+1?
+                if (q.getRA() == multiple_queries[i].getRA()) {
+                    if (multiple_queries[i].getRA() != 0) {
+                        RA_queries.push(multiple_queries[i]);
+                    }
+                    multiple_queries[i] = new Query(0, null);
+                }
+            }
+            let txt = this.queryArrayToString(RA_queries);
+            sessionData.push(txt);
         }
-
-
-
-        sessionData = sessionData.substr(0, sessionData.lastIndexOf(",") - 1);
+        //sessionData = sessionData.substr(0, sessionData.lastIndexOf(",") - 1);
         console.log("*************SessionData to be uploaded: ");
         console.log(sessionData);
         return new Promise((resolve, reject) => {
             firebase.database().ref('/sessions/' + this.getInstitutionKey(userInfo.institution) + '/' + this.sessionID).set(
                 sessionData
-            ).then(() => {                
-                resolve();
+            ).then(() => {
+                firebase.database().ref('/sessions/index/' + this.sessionID).set({
+                    "sharedID": shareID,
+                    "institution": this.getInstitutionKey(userInfo.institution),
+                    "user": userInfo.name
+                }).then(() => {
+                    resolve();
+                },
+                    error => reject(error));
             },
                 error => reject(error)); // fazer timeout
         });
@@ -163,8 +182,13 @@ export class CheckerApi {
         return this.userData;
     }
 
-    private getAnother(ra: number, list: Array<Query>){
-        
+    private queryArrayToString(list: Array<Query>) {
+        let res = '"' + list[0].getRA() + '":';
+        for (let i = 0; i < list.length; i++) {
+            res += '"' + list[i].getTime() + ','
+        }
+        res = res.substr(0, res.lastIndexOf(",") - 1);
+        res += '"';
+        return res;
     }
-
 }

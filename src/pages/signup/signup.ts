@@ -47,8 +47,9 @@ export class SignupPage {
   }
 
   signupUser() {
-    console.log("Form is valid?", this.signupForm.valid)
-    if (!this.signupForm.valid || this.hasError) {
+    console.log(this.signupForm.value);
+    let control = this.signupForm.controls;
+    if (!this.signupForm.valid || this.hasError || (control["email"].value.split("@")[1] != "dcefacamp.com" && control["instituicao"].value == "DCE Celso Furtado")) {
       //this.errorMsg = "erro";
       const toast = this.toastCtrl.create({
         message: this.errorMsg,
@@ -58,17 +59,18 @@ export class SignupPage {
       });
 
       toast.present();
-      console.log(this.signupForm.value);
+      //console.log(this.signupForm.value);
     } else {
       console.log("No errors");
-      /* this.authProvider.signupUser(this.signupForm.value.email, this.signupForm.value.password, this.signupForm.value.name, this.signupForm.value.cargo, this.signupForm.value.instituicao, this.deviceInfo).then(() => {
+      this.authProvider.signupUser(this.signupForm.value.email, this.signupForm.value.password, this.signupForm.value.name, this.signupForm.value.cargo, this.signupForm.value.instituicao, this.deviceInfo).then(() => {
          this.loading.dismiss().then( () => {
            let alert = this.alertCtrl.create({
-             message: "Conta criada com sucesso!",
+             message: "Conta criada com sucesso! \n Entre no seu email para ativar",
              buttons: [
                {
                  text: "Ok",
                  handler: data =>{
+                   this.authProvider.sendConfirmationEmail();
                    this.navCtrl.setRoot(IntroPage);
                  }
                }
@@ -92,12 +94,12 @@ export class SignupPage {
          });
        });
        this.loading = this.loadingCtrl.create();
-       this.loading.present();*/
+       this.loading.present();
     }
   }
 
   private onChanges(): void {
-    console.log("On change");
+    //console.log("On change");
     this.signupForm.valueChanges.subscribe(val => {
       let control = this.signupForm.controls;
       let emailMsg, nameMsg, passwordMsg, instMsg, cargoMsg;
@@ -116,45 +118,47 @@ export class SignupPage {
         cargoMsg = "";
       }
       if (!control["email"].valid) {
-        emailMsg = "Email inválido";
+        emailMsg = "Email inválido!";
         this.hasError = true;
       } else {
         this.hasError = false;
         emailMsg = "";
       }
       if (control["email"].value.split("@")[1] != "dcefacamp.com" && control["instituicao"].value == "DCE Celso Furtado") {
-        emailMsg = "Digite o seu email DCE";
+        emailMsg = "Digite o seu email DCE!";
         this.hasError = true;
       }
       if (!control["password"].valid) {
-        passwordMsg = "A senha precisa ter no mínimo 6 caracteres";
+        passwordMsg = "A senha precisa ter no mínimo 6 caracteres!";
         this.hasError = true;
       } else {
         this.hasError = false;
         passwordMsg = "";
       }
       if (!control["name"].valid) {
-        nameMsg = "Digite seu sobrenome";
+        nameMsg = "Digite seu sobrenome!";
         this.hasError = true;
       } else {
         this.hasError = false;
         nameMsg = "";
       }
-      this.errorMsg = nameMsg
-
-      if(instMsg!=""){
-        this.errorMsg += "\n" + instMsg ;
+      this.errorMsg = "";
+      if (nameMsg != "") {
+        this.errorMsg += nameMsg + "\n";
       }
-      if(cargoMsg!=""){
-        this.errorMsg += "\n" + cargoMsg ;
+      if (instMsg != "") {
+        this.errorMsg += instMsg + "\n";
       }
-      if(emailMsg!=""){
-        this.errorMsg += "\n" + emailMsg ;
+      if (cargoMsg != "") {
+        this.errorMsg += cargoMsg + "\n";
       }
-      if(passwordMsg!=""){
-        this.errorMsg += "\n" + passwordMsg ;
+      if (emailMsg != "") {
+        this.errorMsg += emailMsg + "\n";
       }
-      console.log("Form is valid? ", this.signupForm.valid, "hasErrors?", this.hasError);
+      if (passwordMsg != "") {
+        this.errorMsg += passwordMsg;
+      }
+      //console.log("Form is valid? ", this.signupForm.valid, "hasErrors?", this.hasError);
     });
   }
 }
