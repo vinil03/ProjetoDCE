@@ -22,10 +22,6 @@ export class ResetPasswordPage {
       });
   }
 
-  GoBack(){
-    this.navCtrl.pop();
-  }
-
   resetPassword(){
     if (!this.resetPasswordForm.valid){
       console.log(this.resetPasswordForm.value);

@@ -35,13 +35,14 @@ export class List<T> {
     }
 
     arrange(): any {
-        this.items.sort((a, b): number => {
+        /*this.items.sort((a, b): number => {
             if (a.getRA() < b.getRA()) return -1;
             if (a.getRA() > b.getRA()) return 1;
             return 0;
-        });
-        //for(let i = 0; this.size(); i++){
-        //let query = this.getItem(i);
-        //}
+        });*/
+    }
+
+    clear(): void {
+        this.items.length = 0;
     }
 }

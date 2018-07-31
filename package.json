@@ -24,6 +24,7 @@
     "@ionic-native/barcode-scanner": "^4.7.0",
     "@ionic-native/core": "4.7.0",
     "@ionic-native/device": "^4.7.0",
+    "@ionic-native/file": "^4.11.0",
     "@ionic-native/splash-screen": "4.7.0",
     "@ionic-native/status-bar": "4.7.0",
     "@ionic/pro": "1.0.20",
@@ -31,6 +32,7 @@
     "cordova-android": "^7.0.0",
     "cordova-plugin-device": "^2.0.2",
     "cordova-plugin-fcm": "^2.1.2",
+    "cordova-plugin-file": "^6.0.1",
     "cordova-plugin-ionic-keyboard": "^2.1.2",
     "cordova-plugin-ionic-webview": "^1.2.1",
     "cordova-plugin-splashscreen": "^5.0.2",
@@ -62,7 +64,8 @@
       "phonegap-plugin-push": {
         "SENDER_ID": "1021352355630"
       },
-      "cordova-plugin-fcm": {}
+      "cordova-plugin-fcm": {},
+      "cordova-plugin-file": {}
     },
     "platforms": [
       "android"

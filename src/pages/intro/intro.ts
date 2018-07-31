@@ -32,8 +32,7 @@ export class IntroPage {
     this.deviceInfo.uuid = this.device.uuid;
     this.deviceInfo.model = this.device.model;
     this.deviceInfo.manufacturer = this.device.manufacturer;
-    console.log("Object DeviceInfo is null?", this.deviceInfo == null);
-    console.log("Device info: ", JSON.stringify(this.deviceInfo));
+    //console.log("Object DeviceInfo is null?", this.deviceInfo == null);
     console.log("UID: ", this.device.uuid, "Modelo: ", this.device.model, "Fabricante: ", this.device.manufacturer)
   }
 

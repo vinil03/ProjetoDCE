@@ -42,10 +42,6 @@ export class SignupPage {
     this.deviceInfo.manufacturer = this.device.manufacturer;
   }
 
-  GoBack(){
-    this.navCtrl.pop();
-  }
-
   signupUser() {
     console.log(this.signupForm.value);
     let control = this.signupForm.controls;

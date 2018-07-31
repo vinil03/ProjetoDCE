@@ -1,8 +1,9 @@
- <ion-content padding>
-    <div class="BotaoVoltar">
-        <button ion-button round outline (click)="GoBack()" id="BotaoVoltar">Voltar</button>
-      </div>
-      
+<ion-header>
+  <ion-navbar>
+    <ion-title>Cadastro</ion-title>
+</ion-navbar> 
+</ion-header>
+ <ion-content padding>    
    <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
     <ion-item>
       <ion-label stacked>Nome</ion-label>

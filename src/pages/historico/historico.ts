@@ -3,6 +3,10 @@ import { IonicPage, NavController, NavParams, LoadingController, ToastController
 import { Query } from '../../resources/Query';
 import { List } from '../../resources/List';
 import { CheckerApi } from '../../shared/checker-api';
+import { Subject } from 'rxjs/subject';
+import { Observable } from 'rxjs/Rx';
+//import {EmailComposer} from '@ionic-native/email-composer';
+//import {File} from '@ionic-native/file';
 
 
 @IonicPage()
@@ -16,40 +20,76 @@ export class HistoricoPage {
   private hasQueryList = false;
   private userData: any;
   private loader: any;
+  private refreshSubject: Subject<void>;
+  private refreshObservable: Observable<void>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private checkerApi: CheckerApi, private loadingController: LoadingController, private toastCtrl: ToastController, private alertController: AlertController) {
     this.userData = this.checkerApi.getUserData();
     //console.log("Nav params in hist: ", this.navParams.data);
     //console.log("User data in hist: ", this.userData);
     this.query = new List();
+    this.refreshSubject = new Subject<void>();
+    this.refreshObservable = this.refreshSubject.asObservable();
   }
   //fazer receber queries e adiciona-las na lista - multilinelist
   ionViewDidLoad() {
     //console.log('Query items[0]: ', this.query.getItem(0), "Query size: ", this.query.size());
     //s if(this.query.getItem(0)){ 
     this.hasQueryList = true; //só faz se tiver pelo menos um item 
-   // }
+    // }
   }
 
   ionViewWillEnter() {
     console.log('Will load');
     this.query = this.checkerApi.getTabData();
+    console.log("query list size: (entering)", this.query.size());
   }
 
-  private upload(fab: FabContainer) {
+  private showAC(fab: FabContainer) {
+    let ID = "";
+    console.log("Alert Controller");
     fab.close();
+    let alert = this.alertController.create({
+      title: 'ID',
+      subTitle: 'Digite um ID. Pode ser utilizado para compartilhar os dados ou somente para referência',
+      inputs: [
+        {
+          name: 'ID',
+          placeholder: 'Opcional',
+          type: 'text'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Salvar',
+          handler: data => {
+            ID = data.ID;
+            this.upload(ID);
+          }
+        }]
+    });
+    alert.present();
+  }
+
+  private upload(ID: string){
     this.loader = this.loadingController.create({ content: "Carregando..." });
     const toast = this.toastCtrl.create({
       message: 'Salvo com sucesso!',
       duration: 2000,
       showCloseButton: true,
       closeButtonText: 'Ok'
-    });      
+    });
     this.loader.present().then(() => {
       console.log("User data: ", this.userData);
-      this.checkerApi.uploadSession(this.userData, "ID de compartilhamento").then(() => {
+      this.checkerApi.uploadSession(this.userData, ID).then(() => {
         this.loader.dismiss();
-        // falta limpar a lista e session id
+        console.log("query list size (end): ", this.query.size());
+        this.refreshSubject.next(); //http://www.damirscorner.com/blog/posts/20170602-AutoRefreshWithManualOverride.html
+        //this.hasQueryList =  false;
         toast.present();
       },
         error => {
@@ -60,11 +100,12 @@ export class HistoricoPage {
             buttons: [{
               text: 'OK'
             }]
-          });  
+          });
           alert.present();
         }
       );
     });
+
   }
 
   private search(fab: FabContainer) {    //usar datetime e calendário
