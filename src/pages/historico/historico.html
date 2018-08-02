@@ -10,21 +10,26 @@
   <div *ngIf="hasQueryList">
     <ion-list>
       <div class="Lista" id="Lista" ion-item *ngFor="let dado of query.items">
-        <ion-item>
+        <!-- <ion-item> -->
           <h2>{{dado.getName()}}</h2>
           <h3>{{dado.getCourse()}}</h3>
           <h3>{{dado.getRA()}}        {{dado.getTime()}}</h3>
-        </ion-item>
+        <!-- </ion-item> -->
       </div>
     </ion-list>
   </div>
 
   <ion-fab right bottom #fab>
-      <button ion-fab ><ion-icon name="arrow-dropup"></ion-icon></button> <!-- fazer os botoes coloridos-->
       <ion-fab-list side="top">
+<<<<<<< HEAD
         <button ion-fab (click)="showSearchAC(fab)"><ion-icon name='search'></ion-icon></button>
         <button ion-fab (click)="showLoadAC(fab)"><ion-icon name='cloud-upload'></ion-icon></button>
       </ion-fab-list>
     </ion-fab>
+=======
+      </ion-fab-list>
+    </ion-fab>
+
+>>>>>>> ca3768f593074fb112b358f93d24c0669c18f12f
 </ion-content>
 
