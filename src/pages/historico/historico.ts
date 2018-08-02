@@ -117,4 +117,41 @@ export class HistoricoPage {
       //busca padrão nos users da msm isntituição
     }
   }
+
+  checarInstituicao(){
+    var DCE = "DCE";
+    var XIX = "XIX";
+    var DIR = "DIR";
+    var ENG = "ENG";
+    var PPM = "PPM";
+    var RI = "RI";
+    var res
+    switch (this.userData.institution) {
+      case "A.A.A. Adhemar F. da Silva": {
+        res = RI;
+        break;
+      }
+      case "A.A.A. PPM": {
+        res = PPM;
+        break;
+      }
+      case "A.A.A. XX de Março": {
+        res = ENG;
+        break;
+      }
+      case "A.A.A. XXVIII de Maio": {
+        res = DIR;
+        break;
+      }
+      case "A.A.A. XIX de Abril": {
+        res = XIX;
+        break;
+      }
+      case "DCE Celso Furtado": {
+        res = DCE;
+        break;
+      }
+    }
+    return res;
+  }
 }
