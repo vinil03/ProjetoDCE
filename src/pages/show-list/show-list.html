@@ -1,0 +1,32 @@
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>{{this.header}}</ion-title>
+  </ion-navbar>
+  <ion-toolbar>
+    <ion-title>{{this.subheader}}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content padding>
+
+    <div *ngIf="hasQueryList">
+        <ion-list> <!--
+          <div class="Lista" id="Lista" ion-item *ngFor="let item of query.items">
+            <ion-item>
+              <h2>{{dado.getName()}}</h2>
+              <h3>{{dado.getCourse()}}</h3>
+              <h3>{{dado.getRA()}}        {{dado.getTime()}}</h3>
+            </ion-item>
+          </div> -->
+        </ion-list>
+      </div>
+
+
+
+  <ion-fab right bottom #fab>
+    <button ion-fab (click)="emailList(fab)">
+      <ion-icon name="mail"></ion-icon>
+    </button>
+</ion-content>

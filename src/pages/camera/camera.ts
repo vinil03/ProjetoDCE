@@ -32,10 +32,10 @@ export class CameraPage {
     this.checkApi.setSessionID(ID.getDate() + ":" + (ID.getMonth() + 1) + ":" + ID.getFullYear() + "-" + ID.getHours() + ":" + ID.getMinutes() + ":" + ID.getSeconds() + ":" + ID.getMilliseconds());
     console.log("Institution key from method: ",  this.checkApi.getInstitutionKey(this.userData.institution));
     //constroi a promise de sessão - timeout de 1h para envio ao firebase da querylist na api
-    this.initiateSession().then(data => {
+    //this.initiateSession().then(data => {
       //faz upload para o firebase (promise).then(
       // fecha o app)
-    })
+    //})
   }
 
   ionViewDidLoad() {

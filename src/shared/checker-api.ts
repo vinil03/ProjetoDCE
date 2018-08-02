@@ -21,8 +21,10 @@ export class CheckerApi {
 
     loadDataBase() {
         return new Promise((resolve) => {
-            this.http.get(`${this.baseUrl}/associates.json`).subscribe((data) => {
-                resolve(data.json());
+            firebase.database().ref("/associates/").once("value").then((data) => {
+            //this.http.get(`${this.baseUrl}/associates.json`).subscribe((data) => {
+                //resolve(data.json());
+                resolve(data.toJSON());
              });
         });
     }
@@ -30,9 +32,9 @@ export class CheckerApi {
     loadUserData(uid: string) {
         return new Promise((resolve, reject) => {
             //console.log("UID: ", uid );
-            firebase.database().ref("/userProfile/"+uid).once("value").then((data) => { // TIMEOUT??
+            firebase.database().ref("/userProfile/"+uid).once("value").then((data) => { // TIMEOUT?? //https://stackoverflow.com/questions/24885500/setting-timeout-on-once-in-firebase
             //this.http.get(`${this.baseUrl}/userProfile/` + uid + `/.json`).timeout(20000).subscribe((data) => {
-                console.log("PromiseUserData: ", data.toJSON())
+                //console.log("PromiseUserData: ", data.toJSON())
                 resolve(data.toJSON());
                 //resolve(data.json());
             }, error => { reject() });
@@ -54,8 +56,10 @@ export class CheckerApi {
 
     getBDVersion(inst: string) {
         return new Promise((resolve) => {
-            this.http.get(`${this.baseUrl}/institutions.json`).subscribe((data: any) => {
-                this.instData = data.json();
+            firebase.database().ref("/institutions/").once("value").then((data) => {
+            //this.http.get(`${this.baseUrl}/institutions.json`).subscribe((data: any) => {
+                //this.instData = data.json();
+                this.instData = data.toJSON();
                 for (let key in this.instData) {
                     if (this.instData[key].Name == inst) {
                         resolve(this.instData[key].DBVersion);
@@ -94,9 +98,6 @@ export class CheckerApi {
             }
         }
         return res;
-
-
-
         /* console.log("Inst received:", inst);
          console.log("InstData: ", this.instData);
  
@@ -119,8 +120,6 @@ export class CheckerApi {
             //this.tabData = new List();
             console.log("QueryList: ", this.tabData);
             //console.log("QueryListSize: ", this.tabData.size());
-
-
             for (let i = 0; i < this.tabData.size(); i++) { // separa todos os RAs que n possuem repetição já em sessionData
                 console.log("Entrou no loop");
                 let q = this.tabData.getItem(i);
@@ -151,13 +150,13 @@ export class CheckerApi {
             console.log("*************SessionData to be uploaded: ");
             console.log(sessionData);
             return new Promise((resolve, reject) => {
-                firebase.database().ref('/sessions/' + this.getInstitutionKey(userInfo.institution) + '/' + this.sessionID).set(
+                firebase.database().ref('/sessions/sessionData/' + this.sessionID).set(
                     sessionData
                 ).then(() => {
-                    firebase.database().ref('/sessions/index/' + this.sessionID).set({
+                    firebase.database().ref('/sessions/index/'  + this.getInstitutionKey(userInfo.institution) + '/'+ this.sessionID).set({
                         "ID": shareID,
                         //"institution": this.getInstitutionKey(userInfo.institution),
-                        "institution": userInfo.institution,
+                        //"institution": userInfo.institution,
                         "user": userInfo.name
                     }).then(() => {
                         let ID = new Date();
@@ -171,6 +170,24 @@ export class CheckerApi {
                     error => reject(error)); // fazer timeout
             });
         }
+    }
+
+    getSessionIndex(){
+        return new Promise((resolve, reject) => {
+            firebase.database().ref('/sessions/index/').once("value").then((data) => {
+                resolve(data.toJSON());           
+            },
+                error => reject(error));
+        });
+    }
+
+    getSessionDataByKey(key: string){
+        return new Promise((resolve, reject) => {
+            firebase.database().ref('/sessions/sessionData/'+ key).once("value").then((data) => {
+                resolve(data.toJSON());           
+            },
+                error => reject(error));
+        });
     }
 
     saveDataBase(db: any) {

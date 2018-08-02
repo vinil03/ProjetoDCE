@@ -5,9 +5,8 @@ import { List } from '../../resources/List';
 import { CheckerApi } from '../../shared/checker-api';
 import { Subject } from 'rxjs/subject';
 import { Observable } from 'rxjs/Rx';
-//import {EmailComposer} from '@ionic-native/email-composer';
-//import {File} from '@ionic-native/file';
-
+import { ShowListPage } from '../show-list/show-list';
+//import { DatePicker } from '@ionic-native/date-picker';
 
 @IonicPage()
 @Component({
@@ -35,19 +34,20 @@ export class HistoricoPage {
   ionViewDidLoad() {
     //console.log('Query items[0]: ', this.query.getItem(0), "Query size: ", this.query.size());
     //s if(this.query.getItem(0)){ 
-    this.hasQueryList = true; //só faz se tiver pelo menos um item 
+    //só faz se tiver pelo menos um item 
     // }
   }
 
   ionViewWillEnter() {
-    console.log('Will load');
+    //console.log('Will load');
+    this.hasQueryList = true;
     this.query = this.checkerApi.getTabData();
-    console.log("query list size: (entering)", this.query.size());
+    //console.log("query list size: (entering)", this.query.size());
   }
 
-  private showAC(fab: FabContainer) {
+  private showLoadAC(fab: FabContainer) {
     let ID = "";
-    console.log("Alert Controller");
+    //console.log("Alert Controller");
     fab.close();
     let alert = this.alertController.create({
       title: 'ID',
@@ -75,7 +75,7 @@ export class HistoricoPage {
     alert.present();
   }
 
-  private upload(ID: string){
+  private upload(ID: string) {
     this.loader = this.loadingController.create({ content: "Carregando..." });
     const toast = this.toastCtrl.create({
       message: 'Salvo com sucesso!',
@@ -84,12 +84,14 @@ export class HistoricoPage {
       closeButtonText: 'Ok'
     });
     this.loader.present().then(() => {
-      console.log("User data: ", this.userData);
+      //console.log("User data: ", this.userData);
       this.checkerApi.uploadSession(this.userData, ID).then(() => {
         this.loader.dismiss();
-        console.log("query list size (end): ", this.query.size());
-        this.refreshSubject.next(); //http://www.damirscorner.com/blog/posts/20170602-AutoRefreshWithManualOverride.html
-        //this.hasQueryList =  false;
+        //fazer autoRefresh
+        // console.log("query list size (end): ", this.query.size()); 
+        //this.refreshSubject.next(); //http://www.damirscorner.com/blog/posts/20170602-AutoRefreshWithManualOverride.html
+
+        this.hasQueryList = false;
         toast.present();
       },
         error => {
@@ -108,13 +110,119 @@ export class HistoricoPage {
 
   }
 
-  private search(fab: FabContainer) {    //usar datetime e calendário
-    fab.close();
+  private search(ID: string) {    //usar datetime e calendário
+    //verifica de ID é maior que 0
+    // se for vê se é válido, e se for retorna os dados para enviar para a próxima página
+    // se não, fala ID não encontrado
+    // se o ID for vazio, abrir calendário
+    this.loader = this.loadingController.create({ content: "Carregando..." });
+    if (ID == "") {
+      //datepicker
+      this.loader.present().then(() => {
+
+      });
+    } else {
+      let hasKey = false;
+      let keyFound, userFound;      
+      this.loader.present().then(() => {
+        this.checkerApi.getSessionIndex().then(index => {
+          //fazer buscar a inst
+          console.log("Index: ", index);
+          for (var inst in index) {
+            console.log("Inst: ", inst);
+            for (var key in index[inst]) {
+              console.log("Key: ", key);
+              if (index[inst][key].ID == ID) {
+                //console.log("Key Found: ", key);
+                keyFound = key;
+                userFound = index[inst][key].user;
+                hasKey = true;
+              }
+            }
+          }
+          if (hasKey) {
+            this.pushConsultedList(userFound, keyFound);
+          } else {
+            const toast = this.toastCtrl.create({
+              message: 'ID não encontrado!',
+              duration: 2000,
+              showCloseButton: true,
+              closeButtonText: 'Ok'
+            });
+            //this.loader.dismiss();
+            toast.present();
+          }
+        },
+          error => {
+            const toast = this.toastCtrl.create({
+              message: error,
+              showCloseButton: true,
+              closeButtonText: 'Ok'
+            });
+            this.loader.dismiss();
+            toast.present();
+          }
+        );
+      });
+    }
+
+
+    /* ---Função descontinuada ---
     if (this.userData.institution == "DCE" || this.userData.searchAuth == true) {
       //mostrar calendário para realizar busca.
       // Se autorizado, pode incluir outras instituiçoes por um tempo que deve ser buscado do firebase - fazer exceção para DCE
     } else {
       //busca padrão nos users da msm isntituição
-    }
+    } 
+    */
+  }
+  private pushConsultedList(userName: string, sessionKey: string) {
+    this.checkerApi.getSessionDataByKey(sessionKey).then(data => {
+        console.log("Data donwloaded: ", data);
+
+        this.navCtrl.push(ShowListPage);
+    },
+      error => {
+        const toast = this.toastCtrl.create({
+          message: error,
+          showCloseButton: true,
+          closeButtonText: 'Ok'
+        });
+        this.loader.dismiss();
+        toast.present();
+      }
+    );
+
+    this.loader.dismiss();
+  }
+
+  private showSearchAC(fab: FabContainer) {
+    let ID = "";
+    //console.log("Alert Controller");
+    fab.close();
+    let alert = this.alertController.create({
+      title: 'ID',
+      subTitle: 'Caso tenha, digite um ID para buscar',
+      inputs: [
+        {
+          name: 'ID',
+          placeholder: 'Se não tiver, clique em continuar',
+          type: 'text'
+        },
+      ],
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel'
+        },
+        {
+          text: 'Continuar',
+          handler: data => {
+            ID = data.ID;
+            this.search(ID);
+          }
+        }]
+    });
+    alert.present();
   }
 }
