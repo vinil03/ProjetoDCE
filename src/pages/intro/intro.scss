@@ -2,16 +2,20 @@ page-intro {
 
 }
 
-ver{ //ARRUMAR POSIÇÃO TEXTO
+// #Ver{
+//     text-align: center;
+//     display: inline-block;
+//     font-size: 20px;
+//     margin-top: 10px;
+// }
+
+#Img{
     text-align: center;
-    display: inline-block;
-    font-size: 10em;
+    max-width: 50%;
+    // margin-left: 5px;
     margin-top: 10px;
-    
 }
 
-Img{
-    max-width: 50%;
-    margin-left: 5px;
-    margin-top: 10px;
+#Versao{
+    text-align: center;
 }

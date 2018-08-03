@@ -129,7 +129,7 @@ export class IntroPage {
   showVersion() {
     this.loader2 = this.loadingController.create({
       spinner: 'hide',
-      content: '<div class="Img"> <img src="' + this.getImagePath() + '" /> </div> <div class="ver">' + this.DBversion + '</div>', //corrigir
+      content: '<div class="Img" id="Img"><img src="'+this.getImagePath()+'"/>'+this.DBversion+'</div>',
       duration: 1800,
     });
     this.loader2.present().then(() => {
