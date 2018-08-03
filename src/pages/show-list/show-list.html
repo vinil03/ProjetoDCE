@@ -3,11 +3,11 @@
     <ion-title>{{this.header}}</ion-title>
   </ion-navbar>
   <ion-toolbar>
-    <ion-title>{{this.subheader}}</ion-title>
+    <div>{{this.subHeader}}</div>
   </ion-toolbar>
 </ion-header>
 
-<!--
+
 <ion-content padding>
 <!--
     
@@ -20,9 +20,10 @@
             </ion-item>
           </div>
         </ion-list>
-
+      -->
     <ion-fab right bottom #fab>
     <button ion-fab (click)="emailList(fab)">
       <ion-icon name="mail"></ion-icon>
     </button>
-</ion-content> -->
+    </ion-fab>
+</ion-content> 

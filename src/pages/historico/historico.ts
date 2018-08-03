@@ -119,7 +119,7 @@ export class HistoricoPage {
     if (ID == "") {
       //datepicker
       this.loader.present().then(() => {
-
+        //this.pushConsultedList(userFound, keyFound, "");
       });
     } else {
       let hasKey = false;
@@ -141,7 +141,7 @@ export class HistoricoPage {
             }
           }
           if (hasKey) {
-            this.pushConsultedList(userFound, keyFound);
+            this.pushConsultedList(userFound, keyFound, ID);
           } else {
             const toast = this.toastCtrl.create({
               message: 'ID não encontrado!',
@@ -149,7 +149,7 @@ export class HistoricoPage {
               showCloseButton: true,
               closeButtonText: 'Ok'
             });
-            //this.loader.dismiss();
+            this.loader.dismiss();
             toast.present();
           }
         },
@@ -176,12 +176,23 @@ export class HistoricoPage {
     } 
     */
   }
-  private pushConsultedList(userName: string, sessionKey: string) {
+  private pushConsultedList(userName: string, sessionKey: string, ID: string) {
+    let dk = sessionKey.split("-");
+    let dta =  dk[0].split(":");
+    if(dta[0].length==1){
+      dta[0] = "0" + dta[0];
+    }
+    let subHeader = "Usuário: " + userName + " Data: "  + dta[0]+"/"+ dta[1]+"/"+ dta[2];
+    let header = "Sessão Arquivada";
+    console.log("ID:", ID);
+    if (ID!=""){
+      header += " - " + ID;
+    }
     this.checkerApi.getSessionDataByKey(sessionKey).then(data => {
         console.log("Data donwloaded: ", data);
-        console.log("Data[0]:",data[0]);
-        this.navCtrl.push(ShowListPage);
-        //this.navCtrl.push(ShowListPage, {list: data});
+        //console.log("Data[0]:",data[0]);
+        //this.navCtrl.push(ShowListPage);
+        this.navCtrl.push(ShowListPage, {list: data, header: header, subheader: subHeader});
     },
       error => {
         const toast = this.toastCtrl.create({
@@ -226,7 +237,7 @@ export class HistoricoPage {
     });
     alert.present();
   }
-
+  
   checarInstituicao(){
     var DCE = "DCE";
     var XIX = "XIX";

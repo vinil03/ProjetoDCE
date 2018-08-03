@@ -41,6 +41,11 @@ export class ShowListPage {
     console.log('ionViewDidLoad ShowListPage');
   }
 
+  
+  ionViewWillLeave(){
+    this.navCtrl.popToRoot();
+  }
+
   private returnName(ra: string): string {
     for (var inst in this.dataBase) {
       // console.log("Inst:", inst);
