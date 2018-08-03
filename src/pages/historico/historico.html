@@ -20,10 +20,10 @@
   </div>
 
   <ion-fab right bottom #fab>
-      <button ion-fab ><ion-icon name="arrow-dropup"></ion-icon></button>
+      <button ion-fab  [color]="checarInstituicao()"><ion-icon name="arrow-dropup"></ion-icon></button>
       <ion-fab-list side="top">
-        <button ion-fab (click)="showSearchAC(fab)"><ion-icon name='search'></ion-icon></button>
-        <button ion-fab (click)="showLoadAC(fab)"><ion-icon name='cloud-upload'></ion-icon></button>
+        <button ion-fab  [color]="checarInstituicao()" (click)="showSearchAC(fab)"><ion-icon name='search'></ion-icon></button>
+        <button ion-fab  [color]="checarInstituicao()" (click)="showLoadAC(fab)"><ion-icon name='cloud-upload'></ion-icon></button>
       </ion-fab-list>
     </ion-fab>
 </ion-content>

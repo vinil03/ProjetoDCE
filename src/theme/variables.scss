@@ -35,13 +35,15 @@ $app-direction: ltr;
 
 $colors: (
   primary:  #488aff,
-  DCE:      #eeff00,
-  XIX:      #ff0000,
-  DIR:      #001aff,
-  ENG:      #ff6600,
-  PPM:      #7b00ee,
-  RI :      #ff0000
+  CorDCE:   #eeff00,
+  CorXIX:   #ff0000,
+  CorDIR:   #001aff,
+  CorENG:   #ff6600,
+  CorPPM:   #7b00ee,
+  CorRI :   #ff0000
 );
+
+//$tabs-ios-tab-icon-color-active: red;
 
 
 // App iOS Variables
