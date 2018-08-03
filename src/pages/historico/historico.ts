@@ -28,7 +28,7 @@ export class HistoricoPage {
     //console.log("User data in hist: ", this.userData);
     this.query = new List();
     this.refreshSubject = new Subject<void>();
-    this.refreshObservable = this.refreshSubject.asObservable();
+    //this.refreshObservable = this.refreshSubject.asObservable();
   }
   //fazer receber queries e adiciona-las na lista - multilinelist
   ionViewDidLoad() {
@@ -123,7 +123,7 @@ export class HistoricoPage {
       });
     } else {
       let hasKey = false;
-      let keyFound, userFound;      
+      let keyFound, userFound;
       this.loader.present().then(() => {
         this.checkerApi.getSessionIndex().then(index => {
           //fazer buscar a inst
@@ -178,22 +178,34 @@ export class HistoricoPage {
   }
   private pushConsultedList(userName: string, sessionKey: string, ID: string) {
     let dk = sessionKey.split("-");
-    let dta =  dk[0].split(":");
-    if(dta[0].length==1){
+    let dta = dk[0].split(":");
+    if (dta[0].length == 1) {
       dta[0] = "0" + dta[0];
     }
-    let subHeader = "Usuário: " + userName + " Data: "  + dta[0]+"/"+ dta[1]+"/"+ dta[2];
+    let subHeader = "Usuário: " + userName + " Data: " + dta[0] + "/" + dta[1] + "/" + dta[2];
     let header = "Sessão Arquivada";
     console.log("ID:", ID);
-    if (ID!=""){
+    if (ID != "") {
       header += " - " + ID;
     }
     this.checkerApi.getSessionDataByKey(sessionKey).then(data => {
-        console.log("Data donwloaded: ", data);
-        //console.log("Data[0]:",data[0]);
-        //this.navCtrl.push(ShowListPage);
-        this.navCtrl.push(ShowListPage, {list: data, header: header, subheader: subHeader});
-    },
+      console.log("Data downloaded: ", data);
+      let primalList = Array<string>();
+      primalList = new Array<string>();
+      let list = new List();
+      for (let val in data) {
+        primalList.push(data[val]);
+      }
+      for (let i = 0; i < primalList.length; i = i + 2) {
+        let q = new Query(parseInt(primalList[i]), primalList[i+1]);
+        q.setCourse(this.returnCourse(primalList[i]));
+        q.setName(this.returnName(primalList[i]));
+        list.add(q);
+      } 
+      console.log("List: ", list);
+      this.navCtrl.push(ShowListPage, { list: list, header: header, subheader: subHeader });
+    
+   },
       error => {
         const toast = this.toastCtrl.create({
           message: error,
@@ -237,14 +249,14 @@ export class HistoricoPage {
     });
     alert.present();
   }
-  
-  checarInstituicao(){
-    var DCE = "DCE";
-    var XIX = "XIX";
-    var DIR = "DIR";
-    var ENG = "ENG";
-    var PPM = "PPM";
-    var RI = "RI";
+
+  checarInstituicao() {
+    var DCE = "CorDCE";
+    var XIX = "CorXIX";
+    var DIR = "CorDIR";
+    var ENG = "CorENG";
+    var PPM = "CorPPM";
+    var RI = "CorRI";
     var res
     switch (this.userData.institution) {
       case "A.A.A. Adhemar F. da Silva": {
@@ -274,4 +286,27 @@ export class HistoricoPage {
     }
     return res;
   }
+
+  private returnName(ra: string): string {
+    let dataBase = this.checkerApi.getDataBase();
+    for (var inst in dataBase) {
+      // console.log("Inst:", inst);
+      if (dataBase[inst][ra]) {
+        return dataBase[inst][ra].NAME;
+      }
+    }
+    return "Sem registro";
+  }
+
+  private returnCourse(ra: string): string {
+    let dataBase = this.checkerApi.getDataBase();
+    for (var inst in dataBase) {
+      // console.log("Inst:", inst);
+      if (dataBase[inst][ra]) {
+        return dataBase[inst][ra].COURSE;
+      }
+    }
+    return "";
+  }
+
 }
