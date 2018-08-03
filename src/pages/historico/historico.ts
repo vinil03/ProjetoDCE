@@ -75,7 +75,7 @@ export class HistoricoPage {
     alert.present();
   }
 
-  private upload(ID: string) {
+  private upload(ID: string) { //corrigir para ser somente executado se tiver uma sessão com dados
     this.loader = this.loadingController.create({ content: "Carregando..." });
     const toast = this.toastCtrl.create({
       message: 'Salvo com sucesso!',
@@ -127,11 +127,11 @@ export class HistoricoPage {
       this.loader.present().then(() => {
         this.checkerApi.getSessionIndex().then(index => {
           //fazer buscar a inst
-          console.log("Index: ", index);
+          //console.log("Index: ", index);
           for (var inst in index) {
-            console.log("Inst: ", inst);
+            //console.log("Inst: ", inst);
             for (var key in index[inst]) {
-              console.log("Key: ", key);
+              //console.log("Key: ", key);
               if (index[inst][key].ID == ID) {
                 //console.log("Key Found: ", key);
                 keyFound = key;
@@ -179,8 +179,9 @@ export class HistoricoPage {
   private pushConsultedList(userName: string, sessionKey: string) {
     this.checkerApi.getSessionDataByKey(sessionKey).then(data => {
         console.log("Data donwloaded: ", data);
-
+        console.log("Data[0]:",data[0]);
         this.navCtrl.push(ShowListPage);
+        //this.navCtrl.push(ShowListPage, {list: data});
     },
       error => {
         const toast = this.toastCtrl.create({

@@ -15,6 +15,7 @@ import { Device } from '@ionic-native/device';
 import { AuthProvider } from '../providers/auth/auth';
 import { ResetPasswordPage } from '../pages/reset-password/reset-password';
 import { SignupPage } from '../pages/signup/signup';
+import { ShowListPage } from '../pages/show-list/show-list';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { SignupPage } from '../pages/signup/signup';
     HistoricoPage,
     SignupPage,
     ResetPasswordPage,
-    IntroPage,
+    ShowListPage,
+    IntroPage    
   ],
   imports: [
     BrowserModule,
@@ -42,7 +44,8 @@ import { SignupPage } from '../pages/signup/signup';
     HistoricoPage,
     SignupPage,
     ResetPasswordPage,
-    IntroPage
+    ShowListPage,
+    IntroPage    
   ],
   providers: [
     StatusBar,

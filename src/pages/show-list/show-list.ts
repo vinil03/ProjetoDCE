@@ -29,7 +29,7 @@ export class ShowListPage {
     this.listTime = new Array<string>();
     this.listCourse = new Array<string>();
     this.dataBase  = this.checkApi.getDataBase();
-    for(let i = 0; i<this.list.lenght;i=i+2){
+    for(let i = 0; i<this.list.length;i=i+2){
       this.listRA.push(this.list[i]);
       this.listTime.push(this.list[i+1]);
       this.listName.push(this.returnName(this.list[i]));
