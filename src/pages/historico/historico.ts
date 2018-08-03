@@ -239,12 +239,12 @@ export class HistoricoPage {
   }
   
   checarInstituicao(){
-    var DCE = "DCE";
-    var XIX = "XIX";
-    var DIR = "DIR";
-    var ENG = "ENG";
-    var PPM = "PPM";
-    var RI = "RI";
+    var DCE = "CorDCE";
+    var XIX = "CorXIX";
+    var DIR = "CorDIR";
+    var ENG = "CorENG";
+    var PPM = "CorPPM";
+    var RI = "CorRI";
     var res
     switch (this.userData.institution) {
       case "A.A.A. Adhemar F. da Silva": {
