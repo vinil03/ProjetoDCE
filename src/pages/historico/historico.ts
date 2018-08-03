@@ -249,13 +249,8 @@ export class HistoricoPage {
     });
     alert.present();
   }
-<<<<<<< HEAD
 
-  checarInstituicao() {
-=======
-  
   checarInstituicao(){
->>>>>>> d3842bb485b6ef894754a994a334096465636211
     var DCE = "CorDCE";
     var XIX = "CorXIX";
     var DIR = "CorDIR";
