@@ -12,12 +12,14 @@
   
   <div class="LerCodigo" id="CodB">
     <!-- <button ion-button (click)="launchReader()"> Ler código de barras</button> -->
+    <ion-icon [color]="checarInstituicao()" (click)= "launchReader()" name="md-barcode"  id="CodBarras"></ion-icon>
   </div>
   <div class= "legendaImagem" id="Leg">
       <h4>Ler código de barras</h4>
   </div>
   
   <div class="InputCodigo" id="CodIn">
+      <ion-icon [color]="checarInstituicao()" (click)= "showPrompt()" name="md-keypad" id="CodInput"></ion-icon>
   </div>
   <div class= "legendaImagem" id="Leg">
       <h4>Digitar RA</h4>
