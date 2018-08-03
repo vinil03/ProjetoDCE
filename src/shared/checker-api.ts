@@ -114,7 +114,7 @@ export class CheckerApi {
     }
 
     uploadSession(userInfo: any, shareID: string) {
-        if (this.tabData.size() > 0) {
+        //if (this.tabData.size() > 0) {
             let sessionData: Array<string>;
             sessionData = [];
             //this.tabData = new List();
@@ -150,6 +150,9 @@ export class CheckerApi {
             console.log("*************SessionData to be uploaded: ");
             console.log(sessionData);
             return new Promise((resolve, reject) => {
+                if(!(this.tabData.size() > 0)){
+                    reject("**Não há dados para upload!**");
+                }
                 firebase.database().ref('/sessions/sessionData/' + this.sessionID).set(
                     sessionData
                 ).then(() => {
@@ -169,7 +172,9 @@ export class CheckerApi {
                 },
                     error => reject(error)); // fazer timeout
             });
-        }
+        //}else{
+        //    return reject("Não há dados");
+        //}
     }
 
     getSessionIndex(){
