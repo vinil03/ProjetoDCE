@@ -37,4 +37,41 @@ export class ShowListPage {
     fab.close();
     console.log("Not supported");
   }
+
+  checarInstituicao() {
+    var DCE = "CorDCE";
+    var XIX = "CorXIX";
+    var DIR = "CorDIR";
+    var ENG = "CorENG";
+    var PPM = "CorPPM";
+    var RI = "CorRI";
+    var res
+    switch (this.checkApi.getUserData().institution) {
+      case "A.A.A. Adhemar F. da Silva": {
+        res = RI;
+        break;
+      }
+      case "A.A.A. PPM": {
+        res = PPM;
+        break;
+      }
+      case "A.A.A. XX de Março": {
+        res = ENG;
+        break;
+      }
+      case "A.A.A. XXVIII de Maio": {
+        res = DIR;
+        break;
+      }
+      case "A.A.A. XIX de Abril": {
+        res = XIX;
+        break;
+      }
+      case "DCE Celso Furtado": {
+        res = DCE;
+        break;
+      }
+    }
+    return res;
+  }
 }

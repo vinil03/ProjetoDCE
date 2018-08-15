@@ -18,9 +18,42 @@ export class AuthProvider {
       .auth()
       .createUserWithEmailAndPassword(email, password)
       .then(() => {
-        var auth = false;
-        if(instituicao == "DCE Celso Furtado" && email.split("@")[1]=="dcefacamp.com"){
-          auth = true;
+        let auth: any = {
+          XIX: false,
+          DIR: false,
+          ENG: false,
+          PPM: false,
+          RI: false
+        };
+        if(instituicao == "DCE Celso Furtado" && email.split("@")[1]=="dcefacamp.com" || instituicao == "Clube de Benefícios"){
+            auth.XIX = true;          
+            auth.DIR = true;
+            auth.ENG = true;
+            auth.PPM = true;
+            auth.RI = true;
+        }else{
+          switch(instituicao){
+            case "A.A.A. Adhemar F. da Silva": {
+              auth.RI = true;
+              break;
+            }
+            case "A.A.A. PPM": {
+              auth.PPM = true;
+              break;
+            }
+            case "A.A.A. XX de Março": {
+              auth.ENG = true;
+              break;
+            }
+            case "A.A.A. XXVIII de Maio": {
+              auth.DIR = true;
+              break;
+            }
+            case "A.A.A. XIX de Abril": {
+              auth.XIX = true;
+              break;
+            }         
+          }
         }
         firebase.database().ref('/userProfile/' + firebase.auth().currentUser.uid).set({
           "name": nome,

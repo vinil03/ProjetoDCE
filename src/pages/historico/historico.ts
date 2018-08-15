@@ -19,8 +19,6 @@ export class HistoricoPage {
   private hasQueryList = false;
   private userData: any;
   private loader: any;
-  //private refreshSubject: Subject<void>;
-  //private refreshObservable: Observable<void>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private checkerApi: CheckerApi, private loadingController: LoadingController, private toastCtrl: ToastController, private alertController: AlertController, private datePicker: DatePicker, public authProvider: AuthProvider) {
     this.userData = this.checkerApi.getUserData();
@@ -75,7 +73,7 @@ export class HistoricoPage {
     alert.present();
   }
 
-  private upload(ID: string) { //corrigir para ser somente executado se tiver uma sessão com dados
+  private upload(ID: string) {
     this.loader = this.loadingController.create({ content: "Carregando..." });
     const toast = this.toastCtrl.create({
       message: 'Salvo com sucesso!',
@@ -110,32 +108,96 @@ export class HistoricoPage {
 
   }
 
-  private search(ID: string) {    //usar datetime e calendário
-    //verifica de ID é maior que 0
-    // se for vê se é válido, e se for retorna os dados para enviar para a próxima página
-    // se não, fala ID não encontrado
-    // se o ID for vazio, abrir calendário
+  private search(ID: string) { //Se o ID não for informado, abre o calendário para o usuário escolher um dia
     this.loader = this.loadingController.create({ content: "Carregando..." });
     if (ID == "") {
+      let message = "";
       this.datePicker.show({
         date: new Date(),
         is24Hour: true,
         mode: 'date'
       }).then(
-        date => { console.log('Got date: ', date);});
-        /*this.loader.present().then(() => {
-          //this.pushConsultedList(userFound, keyFound, "");
-          this.checkerApi.getSessionIndex().then(index => {
-            let indexInst = index[this.checkerApi.getInstitutionKey(this.userData.institution)];
-            for (let i in indexInst) {
-              //checa se o primeiro pedaço é igual ao escolhido no datepicker
-            }
-          });
-        });     
-      });   */   
+        datePicked => {
+          if (datePicked == null) {
+            this.abort();
+          } else {
+            this.loader.present().then(() => {
+              let date = datePicked.getDate() + ":" + (datePicked.getMonth() + 1) + ":" + datePicked.getFullYear();
+              let date2 = datePicked.getDate() + "/" + (datePicked.getMonth() + 1) + "/" + datePicked.getFullYear();
+              //this.pushConsultedList(userFound, keyFound, "");
+              let hasKey = false;
+              let keyFound = new Array<string>();
+              this.checkerApi.getSessionIndex().then(index => {
+
+                let indexInst = index[this.checkerApi.getInstitutionKey(this.userData.institution)];
+                for (let i in indexInst) {
+                  if (i.split("-")[0] == date) {
+                    keyFound.push(i);
+                  }
+                }
+                if (keyFound.length > 0) {
+                  if (keyFound.length == 1) {
+                    this.pushConsultedList(this.userData.name, keyFound[0], "");
+                  } else {
+                    let alert = this.alertController.create({
+                      title: 'Há várias sessões armazenadas nesse dia',
+                      message: 'Escolha qual deseja visualizar',
+                      buttons: [
+                        {
+                          text: 'Cancelar',
+                          role: 'cancel',
+                          handler: data => {
+                            this.abort();
+                          }
+                        },
+                        {
+                          text: 'Ir',
+                          handler: data => {
+                            this.pushConsultedList(this.userData.name, data, "");
+                          }
+                        }
+                      ]
+                    });
+                    for (let i = 0; i < keyFound.length; i++) {
+                      let dk = keyFound[i].split("-");
+                      let dta = dk[1].split(":");
+                      if (dta[0].length == 1) {
+                        dta[0] = "0" + dta[0];
+                      }
+                      if (dta[1].length == 1) {
+                        dta[1] = "0" + dta[1];
+                      }
+                      let label = dta[0] + ":" + dta[1];
+                      alert.addInput({
+                        type: 'radio',
+                        label: label,
+                        value: keyFound[i]
+                      });
+                    }
+                    alert.present();
+
+                  }
+                } else {
+                  const toast = this.toastCtrl.create({
+                    message: "Não há sessões gravadas em " + date2,
+                    duration: 2000,
+                    showCloseButton: true,
+                    closeButtonText: 'Ok'
+                  });
+                  this.loader.dismiss();
+                  toast.present();
+                }
+              });
+            });
+          }
+        },
+        error => {
+          this.abort();
+        });
     } else {
       let hasKey = false;
-      let keyFound, userFound;
+      let keyFound = new Array<string>();
+      let userFound = new Array<string>();
       this.loader.present().then(() => {
         this.checkerApi.getSessionIndex().then(index => {
           //fazer buscar a inst
@@ -146,14 +208,50 @@ export class HistoricoPage {
               //console.log("Key: ", key);
               if (index[inst][key].ID == ID) {
                 //console.log("Key Found: ", keygfd
-                keyFound = key;
-                userFound = index[inst][key].user;
+                //keyFound = key;
+                keyFound.push(key);
+                userFound.push(index[inst][key].user);
+                //userFound = index[inst][key].user;
                 hasKey = true;
               }
             }
           }
           if (hasKey) {
-            this.pushConsultedList(userFound, keyFound, ID);
+            let user = userFound[0];
+            let key = keyFound[0];
+            if (userFound.length > 1) {
+              let alert = this.alertController.create({
+                title: 'Múltiplos IDs encontrados!',
+                subTitle: ID,
+                message: 'Escolha de qual usuário deseja visualizar',
+                buttons: [
+                  {
+                    text: 'Cancelar',
+                    role: 'cancel',
+                    handler: data => {
+                      this.abort();
+                    }
+                  },
+                  {
+                    text: 'Ir',
+                    handler: data => {
+                      this.pushConsultedList(userFound[data], keyFound[data], ID);
+                    }
+                  }
+                ]
+              });
+              for (let i = 0; i < userFound.length; i++) {
+                alert.addInput({
+                  type: 'radio',
+                  value: i + "",
+                  label: userFound[i]
+                });
+              }
+              alert.present();
+            } else {
+              this.pushConsultedList(user, key, ID);
+            }
+
           } else {
             const toast = this.toastCtrl.create({
               message: 'ID não encontrado!',
@@ -177,22 +275,20 @@ export class HistoricoPage {
         );
       });
     }
-
-
-    /* ---Função descontinuada ---
-    if (this.userData.institution == "DCE" || this.userData.searchAuth == true) {
-      //mostrar calendário para realizar busca.
-      // Se autorizado, pode incluir outras instituiçoes por um tempo que deve ser buscado do firebase - fazer exceção para DCE
-    } else {
-      //busca padrão nos users da msm isntituição
-    } 
-    */
   }
+
+  private abort() {
+    console.log("Cancelled");
+  }
+
   private pushConsultedList(userName: string, sessionKey: string, ID: string) {
     let dk = sessionKey.split("-");
     let dta = dk[0].split(":");
     if (dta[0].length == 1) {
       dta[0] = "0" + dta[0];
+    }
+    if (dta[1].length == 1) {
+      dta[1] = "0" + dta[1];
     }
     let subHeader = "Usuário: " + userName + " Data: " + dta[0] + "/" + dta[1] + "/" + dta[2];
     let header = "Sessão Arquivada";
@@ -202,8 +298,7 @@ export class HistoricoPage {
     }
     this.checkerApi.getSessionDataByKey(sessionKey).then(data => {
       console.log("Data downloaded: ", data);
-      let primalList = Array<string>();
-      primalList = new Array<string>();
+      let primalList = new Array<string>();
       let list = new List();
       for (let val in data) {
         primalList.push(data[val]);
@@ -321,13 +416,13 @@ export class HistoricoPage {
     return "";
   }
 
-  private logout(fab: FabContainer){
+  private logout(fab: FabContainer) {
     fab.close();
     console.log("Logout");
     this.authProvider.logoutUser();
     this.navCtrl.setRoot(LoginPage);
   }
-  
-    
+
+
 
 }

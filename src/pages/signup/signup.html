@@ -7,7 +7,7 @@
    <form [formGroup]="signupForm" (submit)="signupUser()" novalidate>
     <ion-item>
       <ion-label stacked>Nome</ion-label>
-        <ion-input formControlName="name" type="text" placeholder="Jose da Silva Junior"></ion-input> -->
+        <ion-input formControlName="name" type="text" placeholder="Jose da Silva Junior"></ion-input>
         <div class = "errorMessage">{{messageName}}</div>
       </ion-item>
 
@@ -20,6 +20,7 @@
           <ion-option>A.A.A. XIX de Abril</ion-option> <!-- Eco/Adm -->
           <ion-option>A.A.A. XX de Março</ion-option> <!-- Eng -->
           <ion-option>A.A.A. XXVIII de Maio</ion-option> <!-- Dir --> 
+          <ion-option>Clube de Benefícios</ion-option>          
           <ion-option>DCE Celso Furtado</ion-option>
     </ion-select>
     </ion-item>

@@ -67,10 +67,7 @@ export class IntroPage {
         var uid = firebase.auth().currentUser.uid
         this.checkerApi.loadUserData(uid).then((userData: any) => {
           var isOkay = true;
-          //console.log("email:", firebase.auth().currentUser.emailVerified);
-          //console.log("User Information loaded: ", userData);
-          //console.log("User Information is null? ", userData == null);
-          //console.log("AUTHORIZED?", !userData.verified == false);
+
           if (userData == null && isOkay) {
             isOkay = false;
             this.loader.dismiss();
@@ -81,6 +78,11 @@ export class IntroPage {
               this.loader.dismiss();
               reject(new Error("Verifique o seu email para ativar a conta"));
             }
+           /* if(false){
+              isOkay = false;
+              this.loader.dismiss();
+              reject(new Error("Aplicativo desatualizado. Verifique por atualizações na sua app store"));
+            }*/
             if (userData.verified == false && isOkay) {
               isOkay = false;
               this.loader.dismiss();
@@ -93,6 +95,7 @@ export class IntroPage {
             //}
             if (userData.deviceInfo == "newDevice" && isOkay) { // troca de dispositivo - cadastra o novo
               this.checkerApi.updateDevice(uid, this.deviceInfo);
+              console.log("New device registred");
             }
           }
           if (isOkay) {
@@ -113,8 +116,10 @@ export class IntroPage {
   loadData() {
     this.loader = this.loadingController.create({ content: "Carregando..." });
     this.loader.present().then(() => {
+      console.log("Will get database");
       this.checkerApi.loadDataBase().then(apiData => {
         this.dataBase = apiData;
+        console.log("Got database. Will get version");
         this.checkerApi.getBDVersion(this.userData.institution).then((version: string) => {
           this.DBversion = version;
           console.log("BD loaded - Loader will be dismissed", this.dataBase)

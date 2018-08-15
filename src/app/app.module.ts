@@ -55,8 +55,7 @@ import { DatePicker } from '@ionic-native/date-picker';
     Device,
     AuthProvider,
     DatePicker,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    AuthProvider
+    {provide: ErrorHandler, useClass: IonicErrorHandler}
   ]
 })
 export class AppModule {}

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Loading, AlertController, LoadingController } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Loading, AlertController, LoadingController, ToastController } from 'ionic-angular';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { IntroPage } from '../intro/intro';
@@ -18,12 +18,17 @@ export class LoginPage {
 
   public loginForm: FormGroup;
   public loading: Loading;
+  private toast = this.toastCtrl.create({
+    message: "Funcionalidade não disponível nessa versão",
+    showCloseButton: true,
+    closeButtonText: 'Ok'
+  });
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public authProvider: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public formBuilder: FormBuilder){//, public afAuth: AngularFireAuth) {
-
+  constructor(public navCtrl: NavController, public navParams: NavParams, public authProvider: AuthProvider, public loadingCtrl: LoadingController, public alertCtrl: AlertController, public formBuilder: FormBuilder, private toastCtrl: ToastController){//, public afAuth: AngularFireAuth) {
+    
     this.loginForm = formBuilder.group({
       email: ['',
-        Validators.compose([Validators.required, EmailValidator.isValid])],
+        Validators.compose([Validators.minLength(6), Validators.required, EmailValidator.isValid])],
       password: ['',
         Validators.compose([Validators.minLength(6), Validators.required])]
     });
@@ -39,7 +44,7 @@ export class LoginPage {
           this.loading.dismiss().then(() => {
             this.navCtrl.setRoot(IntroPage);
           });
-        }, error => { // mensagens de erro n estão sendo mostradas
+        }, error => { // algumas mensagens de erro podem não estar sendo mostradas
           this.loading.dismiss().then(() => {
             let alert = this.alertCtrl.create({
               message: error.message,
@@ -65,10 +70,13 @@ export class LoginPage {
 
   verifyUser_FB() { //substistuir por verificar login
     console.log("Deu certo Login por Facebook!!!");
+    this.toast.present();
   }
 
   verifyUser_G() {
     console.log("Deu certo Login por Google!!!");
+    this.toast.present();
+    
     /*this.signInWithGoogle()
       .then(
         () => this.navCtrl.setRoot(IntroPage),
@@ -86,10 +94,13 @@ export class LoginPage {
     console.log('ionViewDidLoad LoginPage');
   }
 
-  /*private signInWithGoogle() {
-    console.log('Sign in with google');
-    return this.oauthSignIn(new firebase.auth.GoogleAuthProvider());
+  private signInWithGoogle() {
+    console.log('Sign in with google');    
+            
+    
+    //return this.oauthSignIn(new firebase.auth.GoogleAuthProvider());
   }
+/*
 
   private oauthSignIn(provider: GoogleAuthProvider) {
     if (!(<any>window).cordova) {
