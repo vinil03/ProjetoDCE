@@ -3,10 +3,10 @@ import { IonicPage, NavController, NavParams, LoadingController, ToastController
 import { Query } from '../../resources/Query';
 import { List } from '../../resources/List';
 import { CheckerApi } from '../../shared/checker-api';
-import { Subject } from 'rxjs/subject';
-import { Observable } from 'rxjs/Rx';
 import { ShowListPage } from '../show-list/show-list';
-//import { DatePicker } from '@ionic-native/date-picker';
+import { DatePicker } from '@ionic-native/date-picker';
+import { AuthProvider } from '../../providers/auth/auth';
+import { LoginPage } from '../login/login';
 
 @IonicPage()
 @Component({
@@ -19,15 +19,15 @@ export class HistoricoPage {
   private hasQueryList = false;
   private userData: any;
   private loader: any;
-  private refreshSubject: Subject<void>;
-  private refreshObservable: Observable<void>;
+  //private refreshSubject: Subject<void>;
+  //private refreshObservable: Observable<void>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private checkerApi: CheckerApi, private loadingController: LoadingController, private toastCtrl: ToastController, private alertController: AlertController) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private checkerApi: CheckerApi, private loadingController: LoadingController, private toastCtrl: ToastController, private alertController: AlertController, private datePicker: DatePicker, public authProvider: AuthProvider) {
     this.userData = this.checkerApi.getUserData();
     //console.log("Nav params in hist: ", this.navParams.data);
     //console.log("User data in hist: ", this.userData);
     this.query = new List();
-    this.refreshSubject = new Subject<void>();
+    //this.refreshSubject = new Subject<void>();
     //this.refreshObservable = this.refreshSubject.asObservable();
   }
   //fazer receber queries e adiciona-las na lista - multilinelist
@@ -117,10 +117,22 @@ export class HistoricoPage {
     // se o ID for vazio, abrir calendário
     this.loader = this.loadingController.create({ content: "Carregando..." });
     if (ID == "") {
-      //datepicker
-      this.loader.present().then(() => {
-        //this.pushConsultedList(userFound, keyFound, "");
-      });
+      this.datePicker.show({
+        date: new Date(),
+        is24Hour: true,
+        mode: 'date'
+      }).then(
+        date => { console.log('Got date: ', date);});
+        /*this.loader.present().then(() => {
+          //this.pushConsultedList(userFound, keyFound, "");
+          this.checkerApi.getSessionIndex().then(index => {
+            let indexInst = index[this.checkerApi.getInstitutionKey(this.userData.institution)];
+            for (let i in indexInst) {
+              //checa se o primeiro pedaço é igual ao escolhido no datepicker
+            }
+          });
+        });     
+      });   */   
     } else {
       let hasKey = false;
       let keyFound, userFound;
@@ -133,7 +145,7 @@ export class HistoricoPage {
             for (var key in index[inst]) {
               //console.log("Key: ", key);
               if (index[inst][key].ID == ID) {
-                //console.log("Key Found: ", key);
+                //console.log("Key Found: ", keygfd
                 keyFound = key;
                 userFound = index[inst][key].user;
                 hasKey = true;
@@ -197,15 +209,15 @@ export class HistoricoPage {
         primalList.push(data[val]);
       }
       for (let i = 0; i < primalList.length; i = i + 2) {
-        let q = new Query(parseInt(primalList[i]), primalList[i+1]);
+        let q = new Query(parseInt(primalList[i]), primalList[i + 1]);
         q.setCourse(this.returnCourse(primalList[i]));
         q.setName(this.returnName(primalList[i]));
         list.add(q);
-      } 
+      }
       console.log("List: ", list);
       this.navCtrl.push(ShowListPage, { list: list, header: header, subheader: subHeader });
-    
-   },
+
+    },
       error => {
         const toast = this.toastCtrl.create({
           message: error,
@@ -250,7 +262,7 @@ export class HistoricoPage {
     alert.present();
   }
 
-  checarInstituicao(){
+  checarInstituicao() {
     var DCE = "CorDCE";
     var XIX = "CorXIX";
     var DIR = "CorDIR";
@@ -308,5 +320,14 @@ export class HistoricoPage {
     }
     return "";
   }
+
+  private logout(fab: FabContainer){
+    fab.close();
+    console.log("Logout");
+    this.authProvider.logoutUser();
+    this.navCtrl.setRoot(LoginPage);
+  }
+  
+    
 
 }

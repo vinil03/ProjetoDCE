@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import firebase from 'firebase';
-import { resolveDefinition } from '../../../node_modules/@angular/core/src/view/util';
+//import { resolveDefinition } from '../../../node_modules/@angular/core/src/view/util';
 
 @Injectable()
 export class AuthProvider {
@@ -29,7 +29,7 @@ export class AuthProvider {
           "email": email,
           "admin": false, //por padrão é uma conta comum
           "verified": false, //por padrão, não tem autorização do admin para acessar
-          "searchAuth": auth, //se consegue realizar buscas além da instituição que pertence
+          "searchAuth": auth, //se consegue realizar buscas além da instituição que pertence -- feature n será implementada
           "verifiedBy": "",
           "deviceInfo": deviceInfo
         });

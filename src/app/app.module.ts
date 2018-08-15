@@ -16,6 +16,7 @@ import { AuthProvider } from '../providers/auth/auth';
 import { ResetPasswordPage } from '../pages/reset-password/reset-password';
 import { SignupPage } from '../pages/signup/signup';
 import { ShowListPage } from '../pages/show-list/show-list';
+import { DatePicker } from '@ionic-native/date-picker';
 
 
 @NgModule({
@@ -53,6 +54,7 @@ import { ShowListPage } from '../pages/show-list/show-list';
     CheckerApi,
     Device,
     AuthProvider,
+    DatePicker,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthProvider
   ]
