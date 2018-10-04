@@ -28,7 +28,6 @@ export class HistoricoPage {
     //this.refreshSubject = new Subject<void>();
     //this.refreshObservable = this.refreshSubject.asObservable();
   }
-  //fazer receber queries e adiciona-las na lista - multilinelist
   ionViewDidLoad() {
     //console.log('Query items[0]: ', this.query.getItem(0), "Query size: ", this.query.size());
     //s if(this.query.getItem(0)){ 
@@ -167,7 +166,7 @@ export class HistoricoPage {
                       if (dta[1].length == 1) {
                         dta[1] = "0" + dta[1];
                       }
-                      let label = dta[0] + ":" + dta[1];
+                      let label = this.userData.name + "-" + dta[0] + ":" + dta[1];
                       alert.addInput({
                         type: 'radio',
                         label: label,
@@ -195,9 +194,9 @@ export class HistoricoPage {
           this.abort();
         });
     } else {
-      let hasKey = false;
-      let keyFound = new Array<string>();
-      let userFound = new Array<string>();
+      var hasKey = false;
+      var keyFound = new Array<string>();
+      var userFound = new Array<string>();
       this.loader.present().then(() => {
         this.checkerApi.getSessionIndex().then(index => {
           //fazer buscar a inst
@@ -207,60 +206,11 @@ export class HistoricoPage {
             for (var key in index[inst]) {
               //console.log("Key: ", key);
               if (index[inst][key].ID == ID) {
-                //console.log("Key Found: ", keygfd
-                //keyFound = key;
                 keyFound.push(key);
                 userFound.push(index[inst][key].user);
-                //userFound = index[inst][key].user;
                 hasKey = true;
               }
             }
-          }
-          if (hasKey) {
-            let user = userFound[0];
-            let key = keyFound[0];
-            if (userFound.length > 1) {
-              let alert = this.alertController.create({
-                title: 'Múltiplos IDs encontrados!',
-                subTitle: ID,
-                message: 'Escolha de qual usuário deseja visualizar',
-                buttons: [
-                  {
-                    text: 'Cancelar',
-                    role: 'cancel',
-                    handler: data => {
-                      this.abort();
-                    }
-                  },
-                  {
-                    text: 'Ir',
-                    handler: data => {
-                      this.pushConsultedList(userFound[data], keyFound[data], ID);
-                    }
-                  }
-                ]
-              });
-              for (let i = 0; i < userFound.length; i++) {
-                alert.addInput({
-                  type: 'radio',
-                  value: i + "",
-                  label: userFound[i]
-                });
-              }
-              alert.present();
-            } else {
-              this.pushConsultedList(user, key, ID);
-            }
-
-          } else {
-            const toast = this.toastCtrl.create({
-              message: 'ID não encontrado!',
-              duration: 2000,
-              showCloseButton: true,
-              closeButtonText: 'Ok'
-            });
-            this.loader.dismiss();
-            toast.present();
           }
         },
           error => {
@@ -273,6 +223,68 @@ export class HistoricoPage {
             toast.present();
           }
         );
+        this.loader.dismiss();
+        console.log("hasKey:", hasKey);
+        console.log("keyFound length", keyFound.length);
+        if (hasKey) {
+          let user = userFound[0];
+          let key = keyFound[0];
+          if (userFound.length > 1) {
+            let alert = this.alertController.create({
+              title: 'Múltiplos IDs encontrados!',
+              subTitle: ID,
+              message: 'Escolha qual deseja visualizar',
+              buttons: [
+                {
+                  text: 'Cancelar',
+                  role: 'cancel',
+                  handler: data => {
+                    console.log("Cancel from ID");
+                    this.abort();
+                  }
+                },
+                {
+                  text: 'Ir',
+                  handler: data => {
+                    if(data!=null){
+                    this.pushConsultedList(userFound[data], keyFound[data], ID);
+                  }
+                  }
+                }
+              ]
+            });
+            
+            for (let i = 0; i < userFound.length; i++) {
+              let dk = keyFound[i].split("-");
+              let dta = dk[1].split(":");
+              if (dta[0].length == 1) {
+                dta[0] = "0" + dta[0];
+              }
+              if (dta[1].length == 1) {
+                dta[1] = "0" + dta[1];
+              }
+              let label = userFound[i] + " - " + dta[0] + ":" + dta[1];
+              alert.addInput({
+                type: 'radio',
+                value: i + "",
+                label: label
+              });
+            }
+            alert.present();
+            
+          } else {
+            this.pushConsultedList(user, key, ID);
+          }
+
+        } else {
+          const toast = this.toastCtrl.create({
+            message: 'ID não encontrado!',
+            duration: 2000,
+            showCloseButton: true,
+            closeButtonText: 'Ok'
+          });
+          toast.present();
+        }
       });
     }
   }
